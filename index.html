@@ -9,30 +9,36 @@
         <title>Radix Sorting</title>
 
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="bootstrap/css/main.css" rel="stylesheet">
         <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+        <link href="bootstrap/css/main.css" rel="stylesheet">
         <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	</head>
 	<body>
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      		<div class="container">
-        		<div class="navbar-header">
-          			<a class="navbar-brand" href="#" style="color: white;">Algorithms: Radix Sort</a>
-        		</div>
-      		</div>
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html" style="color: white">Algorithms: Radix Sort</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="about.html">About</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
 		</div>
 		<div class="container" role="main">
 			<div class="row">
 				<div class="col-md-3">
                     <h3>Controls:</h3>
                     <div id="controls">
-                        <label class="control-label">Input Array Length:</label> <input type="text" class="form-control" id="inputLen"/><br />
+                        <label class="control-label">Input Array Length:</label> <input type="text" class="form-control" id="inputLen" /><br />
                         <label class="control-label">Input Number Max-Length:</label> <input type="text" class="form-control" id="inputNumLen"/><br />
-                        <button id="main" class="btn btn-primary btn-sm" >Run</button>
-                        <button id="clean" class="btn btn-primary btn-sm" >Clear Log</button>
-                        <button id="cleanNotLast" class="btn btn-primary btn-sm" >Not Last</button>
+                        <label class="control-label">Number of Runs to Avg:</label> <input type="text" class="form-control" id="inputNumRuns"/><br />
+                        <button id="main" class="btn btn-primary btn-sm" title="Run Radix sort with the current input constraints.">Run</button>
+                        <button id="clean" class="btn btn-primary btn-sm" title="Clear the log">Clear Log</button>
+                        <button id="cleanKeepLast" class="btn btn-primary btn-sm" title="Clear the log but keep the last entry">Clear (Keep Last)</button>
                     </div>
 				</div>
                 <div class="col-md-9">

@@ -2,16 +2,17 @@
 var logDiv = $("div#log");
 var mainButton = $("button#main");
 var cleanButton = $("button#clean");
-var cleanNotLastButton = $("button#cleanNotLast");
+var cleanNotLastButton = $("button#cleanKeepLast");
 var inputLenField = $("input#inputLen");
 var inputNumLenField = $("input#inputNumLen");
-
-
+var inputNumRunsField = $("input#inputNumRuns");
 
 var INPUT_LENGTH = 2000,
     INPUT_INTEGER_LENGTH = 2000,
+    INPUT_NUMBER_RUNS = 100,
     CURRENT_LOG = 1,
     TIMER_ACCURACY = 1000;
+var n; /*global variable to keep track of current array*/
 
 /*when the page is loaded, run this stuff*/
 $(document).ready( function() {
@@ -20,16 +21,20 @@ $(document).ready( function() {
 
     inputLenField.val(INPUT_LENGTH);
     inputNumLenField.val(INPUT_INTEGER_LENGTH);
+    inputNumRunsField.val(INPUT_NUMBER_RUNS);
 
     /*some event binders*/
     mainButton.bind("click", main);
     cleanButton.bind("click", cleanUp);
     cleanNotLastButton.bind("click", cleanUpNotLast);
     inputLenField.bind("change", function(e){
-        INPUT_LENGTH = $(this).val()
+        INPUT_LENGTH = $(this).val();
     });
     inputNumLenField.bind("change", function(e){
-        INPUT_INTEGER_LENGTH = $(this).val()
+        INPUT_INTEGER_LENGTH = $(this).val();
+    });
+    inputNumRunsField.bind("change", function(e){
+        INPUT_NUMBER_RUNS = $(this).val();
     });
 });
 
@@ -38,7 +43,7 @@ var main = function()
 {
     n = genInput();
 
-    doSort(n, RadixSort)
+    doSort(n, RadixSort);
 };
 
 /*wrapper function that will log the time taken to do the sort for an input*/
@@ -46,14 +51,25 @@ var doSort = function(arr, sort)
 {
     log("Before Sorting: ",n);
 
-    var before = performance.now();
-    n = RadixSort(n);
-    var after = performance.now();
+    var tempArr;
+    var timeTaken = 0; /*variable used to calculate avg time taken based on INPUT_NUMBER_RUNS */
 
-    log("\nAfter sorting: ",n);
+    for (var i=0; i< INPUT_NUMBER_RUNS; i++) {
+        tempArr = n.slice(); /*make a copy of the original*/
 
-    log("<b>"+displayTimer(before,after), "</b> For Length: ", INPUT_LENGTH," Max Int Length: ",INPUT_INTEGER_LENGTH);
-    CURRENT_LOG++;
+        /*sort the copy however many times*/
+        var before = performance.now();
+        RadixSort(tempArr);
+        var after = performance.now();
+        timeTaken += (after-before); /*add the time up*/
+    }
+    timeTaken = timeTaken/INPUT_NUMBER_RUNS; /*calculate the avg time*/
+
+    log("\nAfter sorting: ",tempArr);
+
+    log("<b>"+displayTimer(timeTaken), "</b> For Length: ", INPUT_LENGTH," Max Int Length: ",INPUT_INTEGER_LENGTH," For "+INPUT_NUMBER_RUNS," runs");
+
+    incrementLog();
 };
 
 /*counting sort function*/
@@ -87,6 +103,7 @@ var CountingSort = function(a, x)
         c[ Math.floor((a[i]/x)%10) ]--;
     }
 
+    /*copy new array back over original array*/
     for (var i=0; i < n; i++) {
         a[i] = b[i];
     }
@@ -124,19 +141,25 @@ var genInput = function()
 /*helper function to display on the browser and console what is happening*/
 var log = function()
 {
-    var toAppend = [];  /*create a toAppend array to avoid jquery parsing our strings to html too early*/
-    toAppend.push('<p class="log'+CURRENT_LOG+'">');
-    toAppend.push(formatTime(new Date())+' - ');
+    var toAppend = "";  /*create a toAppend string to avoid jquery parsing our strings to html too early*/
+    toAppend += '<p class="log'+CURRENT_LOG+'">'; /*start the log entry*/
+    toAppend += formatTime(new Date())+' - '; /*add the timestamp*/
 
     /*append all the arguments*/
     for (var i = 0; i < arguments.length; i++) {
         console.log(arguments[i]);
-        toAppend.push(arguments[i].toString());
+        toAppend += arguments[i].toString();
     }
-    toAppend.push('</p>');
+    toAppend += '</p>'; /*close the p tag*/
 
     /*after we pushed everything we want to the toAppend array, join it all together and append it*/
-    logDiv.append(toAppend.join(''));
+    logDiv.append(toAppend);
+};
+
+var incrementLog = function()
+{
+    logDiv.append('<hr class="log'+CURRENT_LOG+'" />');
+    CURRENT_LOG++;
 };
 
 /*function to be called to clean up any messiness going on*/
@@ -150,7 +173,7 @@ var cleanUp = function()
 var cleanUpNotLast = function()
 {
     /*empty the log except for the most recent log entry*/
-    logDiv.children().not("p.log"+(CURRENT_LOG-1)).remove();
+    logDiv.children().not(".log"+(CURRENT_LOG-1)).remove();
 };
 
 /*function to format javascript timestamp correctly*/
@@ -162,23 +185,28 @@ var formatTime = function(timestamp)
     var seconds = timestamp.getSeconds();
 
     /*prepend the zero here when needed*/
-    if (hours < 10)
+    if (hours < 10) {
         hours = '0' + hours;
-
-    if (minutes < 10)
+    }
+    if (minutes < 10) {
         minutes = '0' + minutes;
-
-    if (seconds < 10)
+    }
+    if (seconds < 10) {
         seconds = '0' + seconds;
-
+    }
     return hours + ":" + minutes + ":" + seconds;
 };
 
 /*function to display the time*/
 var displayTimer = function(before, after)
 {
-    /*return the string built with the timer information*/
-    return  "Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+    /*if we give it just a length of time, format that*/
+    if (arguments.length == 1) {
+        return  "Time Taken: "+Math.floor((before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+    } else { /*or we gave it an interval and we need to calculate the length of time*/
+        /*return the string built with the timer information*/
+        return  "Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+    }
 };
 
 
