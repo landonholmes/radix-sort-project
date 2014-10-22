@@ -7,9 +7,9 @@ var inputLenField = $("input#inputLen");
 var inputNumLenField = $("input#inputNumLen");
 var inputNumRunsField = $("input#inputNumRuns");
 
-var INPUT_LENGTH = 2000,
-    INPUT_INTEGER_LENGTH = 2000,
-    INPUT_NUMBER_RUNS = 100,
+var INPUT_LENGTH = checkLocalStorage("INPUT_LENGTH", 2000),
+    INPUT_INTEGER_LENGTH = checkLocalStorage("INPUT_INTEGER_LENGTH", 2000),
+    INPUT_NUMBER_RUNS = checkLocalStorage("INPUT_NUMBER_RUNS",100),
     CURRENT_LOG = 1,
     TIMER_ACCURACY = 1000;
 var n; /*global variable to keep track of current array*/
@@ -29,12 +29,15 @@ $(document).ready( function() {
     cleanNotLastButton.bind("click", cleanUpNotLast);
     inputLenField.bind("change", function(e){
         INPUT_LENGTH = $(this).val();
+        localStorage.setItem("INPUT_LENGTH",JSON.stringify($(this).val()));
     });
     inputNumLenField.bind("change", function(e){
         INPUT_INTEGER_LENGTH = $(this).val();
+        localStorage.setItem("INPUT_INTEGER_LENGTH",JSON.stringify($(this).val()));
     });
     inputNumRunsField.bind("change", function(e){
         INPUT_NUMBER_RUNS = $(this).val();
+        localStorage.setItem("INPUT_NUMBER_RUNS",JSON.stringify($(this).val()));
     });
 });
 
@@ -206,6 +209,18 @@ var displayTimer = function(before, after)
     } else { /*or we gave it an interval and we need to calculate the length of time*/
         /*return the string built with the timer information*/
         return  "Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+    }
+};
+
+/*checks local storage for a variable and returns it if it finds it or returns null if not*/
+function checkLocalStorage(name, defaultValue)
+{
+    if (localStorage.getItem(name) != null) {
+        //console.log(name,"loaded from local storage")
+        var temp = localStorage.getItem(name);
+        return JSON.parse(temp);
+    } else {
+        localStorage.setItem(name, defaultValue);
     }
 };
 
