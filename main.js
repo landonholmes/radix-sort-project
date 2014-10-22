@@ -27,17 +27,20 @@ $(document).ready( function() {
     mainButton.bind("click", main);
     cleanButton.bind("click", cleanUp);
     cleanNotLastButton.bind("click", cleanUpNotLast);
-    inputLenField.bind("change", function(e){
+    $("input").bind("keypress", checkInput);
+
+    inputLenField.bind("keyup", function(e){
         INPUT_LENGTH = $(this).val();
-        localStorage.setItem("INPUT_LENGTH",JSON.stringify($(this).val()));
+        localStorage.setItem("INPUT_LENGTH",$(this).val());
+
     });
-    inputNumLenField.bind("change", function(e){
+    inputNumLenField.bind("keyup", function(e){
         INPUT_INTEGER_LENGTH = $(this).val();
-        localStorage.setItem("INPUT_INTEGER_LENGTH",JSON.stringify($(this).val()));
+        localStorage.setItem("INPUT_INTEGER_LENGTH",$(this).val());
     });
-    inputNumRunsField.bind("change", function(e){
+    inputNumRunsField.bind("keyup", function(e){
         INPUT_NUMBER_RUNS = $(this).val();
-        localStorage.setItem("INPUT_NUMBER_RUNS",JSON.stringify($(this).val()));
+        localStorage.setItem("INPUT_NUMBER_RUNS",$(this).val());
     });
 });
 
@@ -221,6 +224,22 @@ function checkLocalStorage(name, defaultValue)
         localStorage.setItem(name, JSON.stringify(defaultValue));
         return defaultValue;
     }
+};
+
+/*function to check input for non-numerics and block them*/
+var checkInput = function(e)
+{
+    var regex = new RegExp('^[0-9]+$');
+    var key = String.fromCharCode(!e.charCode ? e.which : e.charCode); /*get the key pressed from event*/
+    var charCode = (!e.charCode ? e.which : e.charCode);
+    if (charCode != '13' && !regex.test(key)) { /*if key does not match regex*/
+        e.preventDefault(); //block back input
+    }
+
+    if (charCode == '13') {
+        mainButton.click(); /*if enter was pressed, run the sort*/
+    }
+
 };
 
 
