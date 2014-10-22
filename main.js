@@ -216,11 +216,10 @@ var displayTimer = function(before, after)
 function checkLocalStorage(name, defaultValue)
 {
     if (localStorage.getItem(name) != null) {
-        //console.log(name,"loaded from local storage")
-        var temp = localStorage.getItem(name);
-        return JSON.parse(temp);
+        return JSON.parse(localStorage.getItem(name));
     } else {
-        localStorage.setItem(name, defaultValue);
+        localStorage.setItem(name, JSON.stringify(defaultValue));
+        return defaultValue;
     }
 };
 
