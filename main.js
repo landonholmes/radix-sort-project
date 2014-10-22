@@ -3,12 +3,13 @@ var logDiv = $("div#log");
 var mainButton = $("button#main");
 var cleanButton = $("button#clean");
 var cleanNotLastButton = $("button#cleanKeepLast");
+var resetInputsButton = $("button#resetInputs");
 var inputLenField = $("input#inputLen");
-var inputNumLenField = $("input#inputNumLen");
+var inputNumMaxField = $("input#inputNumMax");
 var inputNumRunsField = $("input#inputNumRuns");
 
 var INPUT_LENGTH = checkLocalStorage("INPUT_LENGTH", 2000),
-    INPUT_INTEGER_LENGTH = checkLocalStorage("INPUT_INTEGER_LENGTH", 2000),
+    INPUT_INTEGER_MAX = checkLocalStorage("INPUT_INTEGER_MAX", 2000),
     INPUT_NUMBER_RUNS = checkLocalStorage("INPUT_NUMBER_RUNS",100),
     CURRENT_LOG = 1,
     TIMER_ACCURACY = 1000;
@@ -20,13 +21,14 @@ $(document).ready( function() {
     main();
 
     inputLenField.val(INPUT_LENGTH);
-    inputNumLenField.val(INPUT_INTEGER_LENGTH);
+    inputNumMaxField.val(INPUT_INTEGER_MAX);
     inputNumRunsField.val(INPUT_NUMBER_RUNS);
 
     /*some event binders*/
     mainButton.bind("click", main);
     cleanButton.bind("click", cleanUp);
     cleanNotLastButton.bind("click", cleanUpNotLast);
+    resetInputsButton.bind("click", resetInputs);
     $("input").bind("keypress", checkInput);
 
     inputLenField.bind("keyup", function(e){
@@ -34,9 +36,9 @@ $(document).ready( function() {
         localStorage.setItem("INPUT_LENGTH",$(this).val());
 
     });
-    inputNumLenField.bind("keyup", function(e){
-        INPUT_INTEGER_LENGTH = $(this).val();
-        localStorage.setItem("INPUT_INTEGER_LENGTH",$(this).val());
+    inputNumMaxField.bind("keyup", function(e){
+        INPUT_INTEGER_MAX = $(this).val();
+        localStorage.setItem("INPUT_INTEGER_MAX",$(this).val());
     });
     inputNumRunsField.bind("keyup", function(e){
         INPUT_NUMBER_RUNS = $(this).val();
@@ -73,7 +75,7 @@ var doSort = function(arr, sort)
 
     log("\nAfter sorting: ",tempArr);
 
-    log("<b>"+displayTimer(timeTaken), "</b> For Length: ", INPUT_LENGTH," Max Int Length: ",INPUT_INTEGER_LENGTH," For "+INPUT_NUMBER_RUNS," runs");
+    log("<b>"+displayTimer(timeTaken), "</b> For Length: ", INPUT_LENGTH," Max Int Length: ",INPUT_INTEGER_MAX," For "+INPUT_NUMBER_RUNS," runs");
 
     incrementLog();
 };
@@ -138,7 +140,7 @@ var genInput = function()
 
     for(var i=0;i<INPUT_LENGTH;i++)
     {
-        n.push(Math.floor(Math.random() * INPUT_INTEGER_LENGTH));
+        n.push(Math.floor(Math.random() * INPUT_INTEGER_MAX));
     }
 
     return n;
@@ -208,10 +210,10 @@ var displayTimer = function(before, after)
 {
     /*if we give it just a length of time, format that*/
     if (arguments.length == 1) {
-        return  "Time Taken: "+Math.floor((before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+        return  "Sort Time Taken: "+Math.floor((before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
     } else { /*or we gave it an interval and we need to calculate the length of time*/
         /*return the string built with the timer information*/
-        return  "Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
+        return  "Sort Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
     }
 };
 
@@ -239,7 +241,21 @@ var checkInput = function(e)
     if (charCode == '13') {
         mainButton.click(); /*if enter was pressed, run the sort*/
     }
+};
 
+var resetInputs = function()
+{
+    INPUT_LENGTH = 2000;
+    INPUT_INTEGER_MAX = 2000;
+    INPUT_NUMBER_RUNS = 100;
+
+    localStorage.setItem("INPUT_LENGTH",INPUT_LENGTH);
+    localStorage.setItem("INPUT_INTEGER_MAX",INPUT_INTEGER_MAX);
+    localStorage.setItem("INPUT_NUMBER_RUNS",INPUT_NUMBER_RUNS);
+
+    inputLenField.val(INPUT_LENGTH);
+    inputNumMaxField.val(INPUT_INTEGER_MAX);
+    inputNumRunsField.val(INPUT_NUMBER_RUNS);
 };
 
 

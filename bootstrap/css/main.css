@@ -3,10 +3,25 @@ body {
 }
 @media (max-width: 979px) {
     body {
-        padding-top: 0px;
+        padding-top: 60px;
     }
 }
 
 .panel,.panel-title,.table,.btn,.form-control,.label {
     border-radius: 0;
+}
+
+table#inputTable th {
+    width: 65%;
+    padding-bottom: 15px;
+    text-align: left;
+}
+
+table#inputTable td {
+    text-align: center;
+    padding-right: 15px;
+}
+
+table#inputTable td input {
+    text-align: center;
 }
