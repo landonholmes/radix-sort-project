@@ -234,13 +234,16 @@ var checkInput = function(e)
     var regex = new RegExp('^[0-9]+$');
     var key = String.fromCharCode(!e.charCode ? e.which : e.charCode); /*get the key pressed from event*/
     var charCode = (!e.charCode ? e.which : e.charCode);
-    if (charCode != '13' && !regex.test(key)) { /*if key does not match regex*/
-        e.preventDefault(); //block back input
+    switch(charCode) {
+        case 8: { break;} /*do nothing on backspace*/
+        case 13: { mainButton.click(); /*if enter was pressed, run the sort*/ break;}
+        default: {
+            if (!regex.test(key)) { /*if key does not match regex*/
+                e.preventDefault(); //block back input
+            }
+        }
     }
 
-    if (charCode == '13') {
-        mainButton.click(); /*if enter was pressed, run the sort*/
-    }
 };
 
 var resetInputs = function()
