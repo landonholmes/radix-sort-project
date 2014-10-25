@@ -251,12 +251,7 @@ function checkInput(e)
             }
         }
     }
-
-<<<<<<< HEAD
 }
-=======
-};
->>>>>>> e1b39be72884133dd021f0b8c17a55c78cd454e7
 
 function resetInputs()
 {
