@@ -1,28 +1,32 @@
-/*global variables*/
-var logDiv = $("div#log");
-var mainButton = $("button#main");
-var cleanButton = $("button#clean");
-var cleanNotLastButton = $("button#cleanKeepLast");
-var resetInputsButton = $("button#resetInputs");
-var inputLenField = $("input#inputLen");
-var inputNumMaxField = $("input#inputNumMax");
-var inputNumRunsField = $("input#inputNumRuns");
+/*global $,console*/
+/*variables*/
+var logDiv = $("div#log"),
+    mainButton = $("button#main"),
+    cleanButton = $("button#clean"),
+    cleanNotLastButton = $("button#cleanKeepLast"),
+    resetInputsButton = $("button#resetInputs"),
+    inputLenField = $("input#inputLen"),
+    inputNumMaxField = $("input#inputNumMax"),
+    inputNumRunsField = $("input#inputNumRuns");
 
-var INPUT_LENGTH = checkLocalStorage("INPUT_LENGTH", 2000),
-    INPUT_INTEGER_MAX = checkLocalStorage("INPUT_INTEGER_MAX", 2000),
-    INPUT_NUMBER_RUNS = checkLocalStorage("INPUT_NUMBER_RUNS",100),
-    CURRENT_LOG = 1,
-    TIMER_ACCURACY = 1000;
-var n; /*global variable to keep track of current array*/
+var DEFAULT_INPUT_LENGTH = 2000,
+    DEFAULT_INPUT_INTEGER_MAX = 2000,
+    DEFAULT_INPUT_NUMBER_RUNS = 100,
+    TIMER_ACCURACY = 1000,
+    inputLength = checkLocalStorage("inputLength", DEFAULT_INPUT_LENGTH),
+    inputIntegerMax = checkLocalStorage("inputIntegerMax", DEFAULT_INPUT_INTEGER_MAX),
+    inputNumberRuns = checkLocalStorage("inputNumberRuns",DEFAULT_INPUT_NUMBER_RUNS),
+    currentLog = 1,
+    currArr; /*global variable to keep track of current array*/
 
 /*when the page is loaded, run this stuff*/
 $(document).ready( function() {
     /*call the main function*/
     main();
 
-    inputLenField.val(INPUT_LENGTH);
-    inputNumMaxField.val(INPUT_INTEGER_MAX);
-    inputNumRunsField.val(INPUT_NUMBER_RUNS);
+    inputLenField.val(inputLength);
+    inputNumMaxField.val(inputIntegerMax);
+    inputNumRunsField.val(inputNumberRuns);
 
     /*some event binders*/
     mainButton.bind("click", main);
@@ -32,38 +36,39 @@ $(document).ready( function() {
     $("input").bind("keypress", checkInput);
 
     inputLenField.bind("keyup", function(e){
-        INPUT_LENGTH = $(this).val();
-        localStorage.setItem("INPUT_LENGTH",$(this).val());
+        inputLength = $(this).val();
+        localStorage.setItem("inputLength",$(this).val());
 
     });
     inputNumMaxField.bind("keyup", function(e){
-        INPUT_INTEGER_MAX = $(this).val();
-        localStorage.setItem("INPUT_INTEGER_MAX",$(this).val());
+        inputIntegerMax = $(this).val();
+        localStorage.setItem("inputIntegerMax",$(this).val());
     });
     inputNumRunsField.bind("keyup", function(e){
-        INPUT_NUMBER_RUNS = $(this).val();
-        localStorage.setItem("INPUT_NUMBER_RUNS",$(this).val());
+        inputNumberRuns = $(this).val();
+        localStorage.setItem("inputNumberRuns",$(this).val());
     });
 });
 
 /*the main function*/
-var main = function()
+function main()
 {
-    n = genInput();
+    currArr = genInput();
 
-    doSort(n, RadixSort);
-};
+    var tempArr = currArr.slice();
+    doSort(tempArr, RadixSort);
+}
 
 /*wrapper function that will log the time taken to do the sort for an input*/
-var doSort = function(arr, sort)
+function doSort(arr, sort)
 {
-    log("Before Sorting: ",n);
+    log("Before Sorting: ",currArr);
 
     var tempArr;
-    var timeTaken = 0; /*variable used to calculate avg time taken based on INPUT_NUMBER_RUNS */
+    var timeTaken = 0; /*variable used to calculate avg time taken based on inputNumberRuns */
 
-    for (var i=0; i< INPUT_NUMBER_RUNS; i++) {
-        tempArr = n.slice(); /*make a copy of the original*/
+    for (var i=0; i< inputNumberRuns; i++) {
+        tempArr = currArr.slice(); /*make a copy of the original*/
 
         /*sort the copy however many times*/
         var before = performance.now();
@@ -71,55 +76,58 @@ var doSort = function(arr, sort)
         var after = performance.now();
         timeTaken += (after-before); /*add the time up*/
     }
-    timeTaken = timeTaken/INPUT_NUMBER_RUNS; /*calculate the avg time*/
+    timeTaken = timeTaken/inputNumberRuns; /*calculate the avg time*/
 
     log("\nAfter sorting: ",tempArr);
 
-    log("<b>"+displayTimer(timeTaken), "</b> For Length: ", INPUT_LENGTH," Max Int Length: ",INPUT_INTEGER_MAX," For "+INPUT_NUMBER_RUNS," runs");
+    log("<b>"+displayTimer(timeTaken), "</b> For Length: ", inputLength," Max Int Length: ",inputIntegerMax," For "+inputNumberRuns," runs");
 
     incrementLog();
-};
+}
 
 /*counting sort function*/
-var CountingSort = function(a, x)
+function CountingSort(a, x)
 {
-    var n = a.length; /*length of the array in a variable*/
+    var len = a.length; /*length of the array in a variable*/
     var c = [];  /*create the array of counts*/
     var b = []; /*create the output array*/
+    var i;
 
     /*fill the array with empty values*/
-    for (var i = 0; i < 10; i++)
+    for (i = 0; i < 10; i++) {
         c[i] = 0;
+    }
     /*fill the array with empty values*/
-    for (var i = 0; i < n; i++)
+    for (i = 0; i < len; i++) {
         b[i] = 0;
+    }
 
     /*loop through the array to be sorted and create counts of each integer*/
-    for (var i = 0; i < n; i++) {
+    for (i = 0; i < len; i++) {
         c[Math.floor((a[i] / x) % 10)]++;
     }
 
     /*loop through C and compute the running sum of the counters c[i] is the num of elements in a that are <= to i */
-    for (var i = 1; i < 10; i++) {
+    for (i = 1; i < 10; i++) {
         c[i] += c[i-1];
     }
 
     /*loop through the array of counts and make the output array based on the input array's counts*/
-    for (var i = n - 1; i >= 0; i--)
+    for (i = len - 1; i >= 0; i--)
     {
         b[ c[ Math.floor((a[i]/x)%10) ] - 1] = a[i];
         c[ Math.floor((a[i]/x)%10) ]--;
     }
 
     /*copy new array back over original array*/
-    for (var i=0; i < n; i++) {
+    for (i=0; i < len; i++) {
         a[i] = b[i];
     }
 
-};
+}
 
 /*radix sort with counting sort subroutine*/
-var RadixSort = function(arr)
+function RadixSort(arr)
 {
     var max = Math.max.apply(Math,arr); /*getting max value of the array*/
 
@@ -130,27 +138,27 @@ var RadixSort = function(arr)
 
     /*return the beautifully sorted array*/
     return arr;
-};
+}
 
 /*some helper functions*/
 /*function to generate an input based on the global variables*/
-var genInput = function()
+function genInput()
 {
     var n = [];
 
-    for(var i=0;i<INPUT_LENGTH;i++)
+    for(var i=0;i<inputLength;i++)
     {
-        n.push(Math.floor(Math.random() * INPUT_INTEGER_MAX));
+        n.push(Math.floor(Math.random() * inputIntegerMax));
     }
 
     return n;
-};
+}
 
 /*helper function to display on the browser and console what is happening*/
-var log = function()
+function log()
 {
     var toAppend = "";  /*create a toAppend string to avoid jquery parsing our strings to html too early*/
-    toAppend += '<p class="log'+CURRENT_LOG+'">'; /*start the log entry*/
+    toAppend += '<p class="log'+currentLog+'">'; /*start the log entry*/
     toAppend += formatTime(new Date())+' - '; /*add the timestamp*/
 
     /*append all the arguments*/
@@ -162,30 +170,30 @@ var log = function()
 
     /*after we pushed everything we want to the toAppend array, join it all together and append it*/
     logDiv.append(toAppend);
-};
+}
 
-var incrementLog = function()
+function incrementLog()
 {
-    logDiv.append('<hr class="log'+CURRENT_LOG+'" />');
-    CURRENT_LOG++;
-};
+    logDiv.append('<hr class="log'+currentLog+'" />');
+    currentLog++;
+}
 
 /*function to be called to clean up any messiness going on*/
-var cleanUp = function()
+function cleanUp()
 {
     /*empty the log*/
     logDiv.empty();
-};
+}
 
 /*function to be called to clean up any messiness going on except the last log entry*/
-var cleanUpNotLast = function()
+function cleanUpNotLast()
 {
     /*empty the log except for the most recent log entry*/
-    logDiv.children().not(".log"+(CURRENT_LOG-1)).remove();
-};
+    logDiv.children().not(".log"+(currentLog-1)).remove();
+}
 
 /*function to format javascript timestamp correctly*/
-var formatTime = function(timestamp)
+function formatTime(timestamp)
 {
     /*get each of the components of the timestamp*/
     var hours = timestamp.getHours();
@@ -203,10 +211,10 @@ var formatTime = function(timestamp)
         seconds = '0' + seconds;
     }
     return hours + ":" + minutes + ":" + seconds;
-};
+}
 
 /*function to display the time*/
-var displayTimer = function(before, after)
+function displayTimer(before, after)
 {
     /*if we give it just a length of time, format that*/
     if (arguments.length == 1) {
@@ -215,7 +223,7 @@ var displayTimer = function(before, after)
         /*return the string built with the timer information*/
         return  "Sort Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
     }
-};
+}
 
 /*checks local storage for a variable and returns it if it finds it or returns null if not*/
 function checkLocalStorage(name, defaultValue)
@@ -226,37 +234,40 @@ function checkLocalStorage(name, defaultValue)
         localStorage.setItem(name, JSON.stringify(defaultValue));
         return defaultValue;
     }
-};
+}
 
 /*function to check input for non-numerics and block them*/
-var checkInput = function(e)
+function checkInput(e)
 {
     var regex = new RegExp('^[0-9]+$');
     var key = String.fromCharCode(!e.charCode ? e.which : e.charCode); /*get the key pressed from event*/
     var charCode = (!e.charCode ? e.which : e.charCode);
-    if (charCode != '13' && !regex.test(key)) { /*if key does not match regex*/
-        e.preventDefault(); //block back input
+    switch(charCode) {
+        case 8: { break;} /*do nothing on backspace*/
+        case 13: { mainButton.click(); /*if enter was pressed, run the sort*/ break;}
+        default: {
+            if (!regex.test(key)) { /*if key does not match regex*/
+                e.preventDefault(); //block back input
+            }
+        }
     }
 
-    if (charCode == '13') {
-        mainButton.click(); /*if enter was pressed, run the sort*/
-    }
-};
+}
 
-var resetInputs = function()
+function resetInputs()
 {
-    INPUT_LENGTH = 2000;
-    INPUT_INTEGER_MAX = 2000;
-    INPUT_NUMBER_RUNS = 100;
+    inputLength = DEFAULT_INPUT_LENGTH;
+    inputIntegerMax = DEFAULT_INPUT_INTEGER_MAX;
+    inputNumberRuns = DEFAULT_INPUT_NUMBER_RUNS;
 
-    localStorage.setItem("INPUT_LENGTH",INPUT_LENGTH);
-    localStorage.setItem("INPUT_INTEGER_MAX",INPUT_INTEGER_MAX);
-    localStorage.setItem("INPUT_NUMBER_RUNS",INPUT_NUMBER_RUNS);
+    localStorage.setItem("inputLength",inputLength);
+    localStorage.setItem("inputIntegerMax",inputIntegerMax);
+    localStorage.setItem("inputNumberRuns",inputNumberRuns);
 
-    inputLenField.val(INPUT_LENGTH);
-    inputNumMaxField.val(INPUT_INTEGER_MAX);
-    inputNumRunsField.val(INPUT_NUMBER_RUNS);
-};
+    inputLenField.val(inputLength);
+    inputNumMaxField.val(inputIntegerMax);
+    inputNumRunsField.val(inputNumberRuns);
+}
 
 
 
