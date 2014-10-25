@@ -26,3 +26,7 @@ table#inputTable td {
 table#inputTable td input {
     text-align: center;
 }
+
+div#compareWithDiv label span {
+    padding-bottom: 150px;
+}

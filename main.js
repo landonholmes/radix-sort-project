@@ -7,7 +7,9 @@ var logDiv = $("div#log"),
     resetInputsButton = $("button#resetInputs"),
     inputLenField = $("input#inputLen"),
     inputNumMaxField = $("input#inputNumMax"),
-    inputNumRunsField = $("input#inputNumRuns");
+    inputNumRunsField = $("input#inputNumRuns"),
+    inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
+    inputCompareWithCheck = $("input.compareWithCheck");
 
 var DEFAULT_INPUT_LENGTH = 2000,
     DEFAULT_INPUT_INTEGER_MAX = 2000,
@@ -17,9 +19,12 @@ var DEFAULT_INPUT_LENGTH = 2000,
     inputIntegerMax = checkLocalStorage("inputIntegerMax", DEFAULT_INPUT_INTEGER_MAX),
     inputNumberRuns = checkLocalStorage("inputNumberRuns",DEFAULT_INPUT_NUMBER_RUNS),
     currentLog = 1,
-    currArr; /*global variable to keep track of current array*/
+    seeArrays = checkLocalStorage("seeArrays",JSON.stringify(true)),
+    currArr, /*global variable to keep track of current array*/
+    compareWithChecks = checkLocalStorage("compareWithChecks",[]), /*variable to keep track of which other sorts to compare with*/
+    compareWithTimes = {}; /*variable to keep track of times of compared sorts*/
 
-/*when the page is loaded, run this stuff*/
+    /*when the page is loaded, run this stuff*/
 $(document).ready( function() {
     /*call the main function*/
     main();
@@ -27,6 +32,13 @@ $(document).ready( function() {
     inputLenField.val(inputLength);
     inputNumMaxField.val(inputIntegerMax);
     inputNumRunsField.val(inputNumberRuns);
+    for (var i=0; i < compareWithChecks.length; i++) {
+        $('input[value='+compareWithChecks[i]+']').prop('checked', true);
+    }
+    if (seeArrays) {
+        inputSeeArraysCheckbox.prop('checked',true);
+    }
+
 
     /*some event binders*/
     mainButton.bind("click", main);
@@ -48,6 +60,18 @@ $(document).ready( function() {
         inputNumberRuns = $(this).val();
         localStorage.setItem("inputNumberRuns",$(this).val());
     });
+    inputSeeArraysCheckbox.bind("change", function(e){
+        seeArrays = inputSeeArraysCheckbox.prop("checked");
+        localStorage.setItem("seeArrays",JSON.stringify(inputSeeArraysCheckbox.prop("checked")));
+    });
+    inputCompareWithCheck.bind("change", function(e){
+        checked = inputCompareWithCheck.filter(":checked");
+        compareWithChecks = []; /*reset function names to compare with*/
+        for (var i=0; i < checked.length; i++) {
+            compareWithChecks.push(checked[i].value); /*add all the checked ones to function names*/
+        }
+        localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
+    });
 });
 
 /*the main function*/
@@ -55,14 +79,37 @@ function main()
 {
     currArr = genInput();
 
+    compareWithTimes = {}; /*clear this out*/
+    compareWithTimes.length = 0; /*clear this out*/
+
     var tempArr = currArr.slice();
-    doSort(tempArr, RadixSort);
+    doSort(tempArr, radixSort);
+    for (var i=0; i < compareWithChecks.length; i++) {
+        doSort(tempArr, getFunctionByName(compareWithChecks[i]));
+    }
+
+    if (compareWithTimes.length > 1)
+    {
+        log("Time Comparison: ");
+        /*loop through times to display*/
+        $.each(compareWithTimes, function(key,value){
+            if (key != "length") {
+                log(key,": ", value.timeTaken);
+            }
+        });
+    }
+
+
+    incrementLog();
 }
 
 /*wrapper function that will log the time taken to do the sort for an input*/
 function doSort(arr, sort)
 {
-    log("Before Sorting: ",currArr);
+    log("Using <strong>",sort.name,"</strong>");
+    if (seeArrays) {
+        log("Before Sorting: ",currArr);
+    }
 
     var tempArr;
     var timeTaken = 0; /*variable used to calculate avg time taken based on inputNumberRuns */
@@ -72,21 +119,28 @@ function doSort(arr, sort)
 
         /*sort the copy however many times*/
         var before = performance.now();
-        RadixSort(tempArr);
+        sort(tempArr);
         var after = performance.now();
         timeTaken += (after-before); /*add the time up*/
     }
     timeTaken = timeTaken/inputNumberRuns; /*calculate the avg time*/
 
-    log("\nAfter sorting: ",tempArr);
+    if (seeArrays) {
+        log("\nAfter sorting: ",tempArr);
+    }
 
     log("<b>"+displayTimer(timeTaken), "</b> For Length: ", inputLength," Max Int Length: ",inputIntegerMax," For "+inputNumberRuns," runs");
 
-    incrementLog();
+    logDiv.append('<hr class="log'+currentLog+'" />');
+
+    /*add an entry for sort to the timing log*/
+    compareWithTimes[sort.name] = {"timeTaken": displayTimer(timeTaken)};
+    compareWithTimes.length ++;
+
 }
 
 /*counting sort function*/
-function CountingSort(a, x)
+function countingSort(a, x)
 {
     var len = a.length; /*length of the array in a variable*/
     var c = [];  /*create the array of counts*/
@@ -127,13 +181,13 @@ function CountingSort(a, x)
 }
 
 /*radix sort with counting sort subroutine*/
-function RadixSort(arr)
+function radixSort(arr)
 {
     var max = Math.max.apply(Math,arr); /*getting max value of the array*/
 
     /*do the loop for each digit*/
     for (var x=1; Math.floor(max/x) > 0; x *= 10) {
-        CountingSort(arr, x);   /*call counting sort with a specific digit*/
+        countingSort(arr, x);   /*call counting sort with a specific digit*/
     }
 
     /*return the beautifully sorted array*/
@@ -174,7 +228,6 @@ function log()
 
 function incrementLog()
 {
-    logDiv.append('<hr class="log'+currentLog+'" />');
     currentLog++;
 }
 
@@ -258,14 +311,26 @@ function resetInputs()
     inputLength = DEFAULT_INPUT_LENGTH;
     inputIntegerMax = DEFAULT_INPUT_INTEGER_MAX;
     inputNumberRuns = DEFAULT_INPUT_NUMBER_RUNS;
+    seeArrays = true;
+    compareWithChecks = [];
 
     localStorage.setItem("inputLength",inputLength);
     localStorage.setItem("inputIntegerMax",inputIntegerMax);
     localStorage.setItem("inputNumberRuns",inputNumberRuns);
+    localStorage.setItem("seeArrays",JSON.stringify(seeArrays));
+    localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
 
     inputLenField.val(inputLength);
     inputNumMaxField.val(inputIntegerMax);
     inputNumRunsField.val(inputNumberRuns);
+    inputSeeArraysCheckbox.prop('checked',true);
+    inputCompareWithCheck.prop('checked',false);
+}
+
+/*a function to call a specific function by name*/
+function getFunctionByName(functionName)
+{
+    return window[functionName];
 }
 
 

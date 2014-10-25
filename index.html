@@ -51,7 +51,16 @@
                                 <th><label class="control-label">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
                             </tr>
                         </table>
+                        <div class="checkbox">
+                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label><br>
+                        </div>
                         <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
+                        <div class="checkbox" id="compareWithDiv"><br />
+                            <p>Compare With:</p>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="insertionSort"> <span>Insertion Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="mergeSort"> <span>Merge Sort</span></label><br>
+                            <!--<label><input type="checkbox" class="compareWithCheck" name="sort" value="anotherSort"> <span>Another Sort</span></label><br>-->
+                        </div>
 
                     </div>
 				</div>
@@ -64,6 +73,7 @@
 			</div>
 		</div>
 
+        <script src="sorts.js" ></script>
         <script src="main.js" ></script>
 	</body>
 </html>
