@@ -19,7 +19,7 @@ function insertionSort(arr) {
     return arr;
 }
 
-/*mergeSort*/
+/*mergeSort function*/
 function mergeSort(arr){
 
     if (arr.length < 2) {
@@ -28,24 +28,28 @@ function mergeSort(arr){
 
     var middle = Math.floor(arr.length / 2),
         left    = arr.slice(0, middle),
-        right   = arr.slice(middle);
+        right   = arr.slice(middle),
+        params = merge(mergeSort(left), mergeSort(right));
 
-    return merge(mergeSort(left), mergeSort(right));
+    // Add the arguments to replace everything between 0 and last item in the array
+    params.unshift(0, arr.length);
+    arr.splice.apply(arr, params);
+    return arr;
 }
 
-/*mergeSort helper*/
+/*mergeSort helper function*/
 function merge(left, right){
     var result  = [],
-        indexLeft = 0,
-        indexRight = 0;
+        leftIndex = 0,
+        rightIndex = 0;
 
-    while (indexLeft < left.length && indexRight < right.length){
-        if (left[indexLeft] < right[indexRight]){
-            result.push(left[indexLeft++]);
+    while (leftIndex < left.length && rightIndex < right.length){
+        if (left[leftIndex] < right[rightIndex]){
+            result.push(left[leftIndex++]);
         } else {
-            result.push(right[indexRight++]);
+            result.push(right[rightIndex++]);
         }
     }
 
-    return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
+    return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 }
