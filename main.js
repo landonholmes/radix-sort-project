@@ -331,7 +331,7 @@ function resetInputs()
     localStorage.setItem("inputIntegerMax",inputIntegerMax);
     localStorage.setItem("inputNumberRuns",inputNumberRuns);
     localStorage.setItem("seeArrays",JSON.stringify(seeArrays));
-    localStorage.setItem("inputOrder",inputOrder);
+    localStorage.setItem("inputOrder",JSON.stringify(inputOrder));
     localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
 
     inputLenField.val(inputLength);
