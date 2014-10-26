@@ -28,116 +28,133 @@ var DEFAULT_INPUT_LENGTH = 1000,
 
     /*when the page is loaded, run this stuff*/
 $(document).ready( function() {
-    /*call the main function*/
-    main();
+    main();  /*call the main function*/
 
+    /*populate input with variables*/
     inputLenField.val(inputLength);
     inputNumMaxField.val(inputIntegerMax);
     inputNumRunsField.val(inputNumberRuns);
+
+    /*populate compare other sorts checkboxes*/
     for (var i=0; i < compareWithChecks.length; i++) {
         $('input[value='+compareWithChecks[i]+']').prop('checked', true);
     }
+    /*check if seeArrays has been set to true*/
     if (seeArrays) {
-        inputSeeArraysCheckbox.prop('checked',true);
+        inputSeeArraysCheckbox.prop('checked',true); /*check the seeArrays checkbox*/
     }
-    inputOrderRadios.filter('[value='+inputOrder+']').prop('checked',true);
+    inputOrderRadios.filter('[value='+inputOrder+']').prop('checked',true); /*select the radio button*/
 
 
     /*some event binders*/
-    mainButton.bind("click", main);
-    cleanButton.bind("click", cleanUp);
-    cleanNotLastButton.bind("click", cleanUpNotLast);
-    resetInputsButton.bind("click", resetInputs);
-    $("input").bind("keypress", checkInput);
+    mainButton.bind("click", main);  /*run main function when mainButton is clicked*/
+    cleanButton.bind("click", cleanUp); /*run cleanUp function when cleanButton is clicked*/
+    cleanNotLastButton.bind("click", cleanUpNotLast);  /*run cleanUpNotLast function when cleanNotLastButton is clicked*/
+    resetInputsButton.bind("click", resetInputs);  /*run resetInputs function when resetInputsButton is clicked*/
+    $("input").bind("keypress", checkInput);  /*run checkInput function when any input has a keypress*/
 
+    /*bind the input length field on keyup event*/
     inputLenField.bind("keyup", function(){
-        inputLength = $(this).val();
-        localStorage.setItem("inputLength",$(this).val());
-
+        inputLength = $(this).val(); /*set variable to value*/
+        localStorage.setItem("inputLength",$(this).val()); /*set the local storage*/
     });
+    /*bind the inputNumMaxField on keyup event*/
     inputNumMaxField.bind("keyup", function(){
-        inputIntegerMax = $(this).val();
-        localStorage.setItem("inputIntegerMax",$(this).val());
+        inputIntegerMax = $(this).val(); /*set variable to value*/
+        localStorage.setItem("inputIntegerMax",$(this).val()); /*set the local storage*/
     });
+    /*bind the inputNumRunsField on keyup event*/
     inputNumRunsField.bind("keyup", function(){
-        inputNumberRuns = $(this).val();
-        localStorage.setItem("inputNumberRuns",$(this).val());
+        inputNumberRuns = $(this).val(); /*set variable to value*/
+        localStorage.setItem("inputNumberRuns",$(this).val());  /*set the local storage*/
     });
+    /*bind the inputOrderRadios on change event*/
     inputOrderRadios.bind("change", function(){
-        inputOrder = $(this).val();
-        localStorage.setItem("inputOrder",JSON.stringify($(this).val()));
+        inputOrder = $(this).val();  /*set variable to value*/
+        localStorage.setItem("inputOrder",JSON.stringify($(this).val()));  /*set the local storage*/
     });
+    /*bind the inputSeeArraysCheckbox on change event*/
     inputSeeArraysCheckbox.bind("change", function(){
-        seeArrays = inputSeeArraysCheckbox.prop("checked");
-        localStorage.setItem("seeArrays",JSON.stringify(inputSeeArraysCheckbox.prop("checked")));
+        seeArrays = inputSeeArraysCheckbox.prop("checked"); /*set variable to value*/
+        localStorage.setItem("seeArrays",JSON.stringify(inputSeeArraysCheckbox.prop("checked")));  /*set the local storage*/
     });
+    /*bind the inputCompareWithCheck on change event*/
     inputCompareWithCheck.bind("change", function(){
-        checked = inputCompareWithCheck.filter(":checked");
+        checked = inputCompareWithCheck.filter(":checked"); /*set checked to checked boxes*/
         compareWithChecks = []; /*reset function names to compare with*/
         for (var i=0; i < checked.length; i++) {
             compareWithChecks.push(checked[i].value); /*add all the checked ones to function names*/
         }
-        localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
+        localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));  /*set the local storage*/
     });
 });
 
 /*the main function*/
 function main()
 {
-    currArr = genInput();
+    currArr = genInput();  /*generate the input*/
 
     compareWithTimes = []; /*clear this out*/
 
-    var tempArr = currArr.slice();
-    doSort(tempArr, radixSort);
+    var tempArr = currArr.slice();   /*put array in temp array to preserve global variable*/
+    doSort(tempArr, radixSort); /*do the radix sort*/
+
+    /*then do any other sorts that were chosen to compare with*/
     for (var i=0; i < compareWithChecks.length; i++) {
-        doSort(tempArr, getFunctionByName(compareWithChecks[i]));
+        doSort(tempArr, getFunctionByName(compareWithChecks[i])); /*do specific sort (by name)*/
     }
 
+    /*if another sort was chosen to compare with*/
     if (compareWithTimes.length > 1)
     {
+        /*sort the times from least to greatest*/
         compareWithTimes = _.sortBy(compareWithTimes, 'timeTaken');
-        log("Time Comparison: (input order: ",inputOrder,")");
+        log("Time Comparison: (input order: ",inputOrder,")"); /*title the log*/
         /*loop through times to display*/
         $.each(compareWithTimes, function(key,value){
-            if (key != "length") {
-                log(value.name,": sorted in ", value.timeTaken, "ms");
-            }
+            log(value.name,": sorted in ", value.timeTaken, "ms"); /*show time for specific sort*/
         });
     }
 
-
+    /*increment the current log*/
     incrementLog();
 }
 
-/*wrapper function that will log the time taken to do the sort for an input*/
+/*wrapper function that will log the time taken to do a sort for an input*/
 function doSort(arr, sort)
 {
     log("Using <strong>",sort.name,"</strong>");
+
+    /*check if they want to see the arrays*/
     if (seeArrays) {
         log("Before Sorting: ",currArr);
     }
 
-    var tempArr;
+
+    var tempArr;  /*make a temp array variable so we don't overwrite original */
     var timeTaken = 0; /*variable used to calculate avg time taken based on inputNumberRuns */
 
+    /*loop runs for a specific number of times*/
     for (var i=0; i< inputNumberRuns; i++) {
         tempArr = arr.slice(); /*make a copy of the original*/
 
         /*sort the copy however many times*/
-        var before = performance.now();
-        sort(tempArr);
-        var after = performance.now();
+        var before = performance.now(); /*start the timer*/
+        sort(tempArr); /*do the sort*/
+        var after = performance.now(); /*stop the timer*/
         timeTaken += (after-before); /*add the time up*/
     }
     timeTaken = timeTaken/inputNumberRuns; /*calculate the avg time*/
 
+    /*check if they want to see the arrays*/
     if (seeArrays) {
         log("\nAfter sorting: ",tempArr);
     }
 
+    /*display some sort info in the log*/
     log("<b>"+displayTimer(timeTaken), "</b> For Length: ", inputLength," Max Int Length: ",inputIntegerMax," For "+inputNumberRuns," runs");
 
+    /*add a pretty line between sorts*/
     logDiv.append('<hr class="log'+currentLog+'" />');
 
     /*add an entry for sort to the timing log*/
@@ -150,13 +167,13 @@ function countingSort(a, x)
     var len = a.length; /*length of the array in a variable*/
     var c = [];  /*create the array of counts*/
     var b = []; /*create the output array*/
-    var i;
+    var i;  /*create index variable so we don't have to create several times*/
 
-    /*fill the array with empty values*/
+    /*fill the c array with empty values*/
     for (i = 0; i < 10; i++) {
         c[i] = 0;
     }
-    /*fill the array with empty values*/
+    /*fill the b array with empty values*/
     for (i = 0; i < len; i++) {
         b[i] = 0;
     }
@@ -199,23 +216,26 @@ function radixSort(arr)
     return arr;
 }
 
-/*some helper functions*/
+/* ---------- some helper functions ---------- */
 /*function to generate an input based on the global variables*/
 function genInput()
 {
-    var n = [];
+    var n = []; /*make an empty array*/
 
-    for(var i=0;i<inputLength;i++)
-    {
+    /*loop to create a specific length array*/
+    for(var i=0;i<inputLength;i++) {
+        /*generate and add a random number between 0 and the max*/
         n.push(Math.floor(Math.random() * inputIntegerMax));
     }
 
+    /*check the order the user wants the input in, default is random*/
     switch(inputOrder) {
         case "ordered": {n=radixSort(n); break;} /*if input is to be ordered first*/
         case "orderedBackwards": {n = radixSort(n).reverse(); break;}  /*if input is to be ordered backwards*/
         case "default": { break;} /*random*/
     }
 
+    /*return the input*/
     return n;
 }
 
@@ -228,8 +248,8 @@ function log()
 
     /*append all the arguments*/
     for (var i = 0; i < arguments.length; i++) {
-        console.log(arguments[i]);
-        toAppend += arguments[i].toString();
+        console.log(arguments[i]); /*console.log the argument*/
+        toAppend += arguments[i].toString(); /*add the argument to the log string*/
     }
     toAppend += '</p>'; /*close the p tag*/
 
@@ -237,6 +257,7 @@ function log()
     logDiv.append(toAppend);
 }
 
+/*function to increment the log counter, might have other functionality*/
 function incrementLog()
 {
     currentLog++;
@@ -245,8 +266,7 @@ function incrementLog()
 /*function to be called to clean up any messiness going on*/
 function cleanUp()
 {
-    /*empty the log*/
-    logDiv.empty();
+    logDiv.empty();  /*empty the log*/
 }
 
 /*function to be called to clean up any messiness going on except the last log entry*/
@@ -292,21 +312,21 @@ function displayTimer(before, after)
 /*checks local storage for a variable and returns it if it finds it or returns null if not*/
 function checkLocalStorage(name, defaultValue)
 {
-    if (localStorage.getItem(name) != null) {
-        return JSON.parse(localStorage.getItem(name));
-    } else {
-        localStorage.setItem(name, JSON.stringify(defaultValue));
-        return defaultValue;
+    if (localStorage.getItem(name) != null) { /*if we find the entry in localStorage*/
+        return JSON.parse(localStorage.getItem(name)); /*retrieve and return the found entry*/
+    } else { /*entry not found*/
+        localStorage.setItem(name, JSON.stringify(defaultValue)); /*create the entry*/
+        return defaultValue; /*return it after creating it*/
     }
 }
 
 /*function to check input for non-numerics and block them*/
 function checkInput(e)
 {
-    var regex = new RegExp('^[0-9]+$');
+    var regex = new RegExp('^[0-9]+$'); /*regex to check for only numerical input*/
     var key = String.fromCharCode(!e.charCode ? e.which : e.charCode); /*get the key pressed from event*/
-    var charCode = (!e.charCode ? e.which : e.charCode);
-    switch(charCode) {
+    var charCode = (!e.charCode ? e.which : e.charCode); /*get the character code*/
+    switch(charCode) { /*switch on the character code*/
         case 8: { break;} /*do nothing on backspace*/
         case 13: { mainButton.click(); /*if enter was pressed, run the sort*/ break;}
         default: {
@@ -320,6 +340,7 @@ function checkInput(e)
 /*function to reset all inputs back to defaults, even the local storage*/
 function resetInputs()
 {
+    /*set variables to defaults*/
     inputLength = DEFAULT_INPUT_LENGTH;
     inputIntegerMax = DEFAULT_INPUT_INTEGER_MAX;
     inputNumberRuns = DEFAULT_INPUT_NUMBER_RUNS;
@@ -327,6 +348,7 @@ function resetInputs()
     inputOrder = "random";
     compareWithChecks = [];
 
+    /*reset localStorage values*/
     localStorage.setItem("inputLength",inputLength);
     localStorage.setItem("inputIntegerMax",inputIntegerMax);
     localStorage.setItem("inputNumberRuns",inputNumberRuns);
@@ -334,6 +356,7 @@ function resetInputs()
     localStorage.setItem("inputOrder",JSON.stringify(inputOrder));
     localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
 
+    /*reset the html inputs*/
     inputLenField.val(inputLength);
     inputNumMaxField.val(inputIntegerMax);
     inputNumRunsField.val(inputNumberRuns);
@@ -342,7 +365,7 @@ function resetInputs()
     inputCompareWithCheck.prop('checked',false);
 }
 
-/*a function to call a specific function by name*/
+/*a function to call a specific function by name, works for window functions*/
 function getFunctionByName(functionName)
 {
     return window[functionName];
