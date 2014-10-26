@@ -12,6 +12,7 @@
         <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
         <link href="bootstrap/css/main.css" rel="stylesheet">
         <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
+        <script src="bootstrap/js/underscore-min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	</head>
@@ -39,28 +40,29 @@
                         <br /><br />
                         <table id="inputTable">
                             <tr>
-                                <td><input type="text" class="form-control input-sm" id="inputLen" maxlength="5" /><br /></td>
-                                <th><label class="control-label">Input Array Length <i class="glyphicon glyphicon-info-sign" title="This input controls the length of the input array that will be generated."></i></label></th>
+                                <td><input type="text" class="form-control input-sm" id="inputLen" name="inputLen" maxlength="5" /><br /></td>
+                                <th><label class="control-label" for="inputLen">Input Array Length <i class="glyphicon glyphicon-info-sign" title="This input controls the length of the input array that will be generated."></i></label></th>
                             </tr>
                             <tr>
-                                <td> <input type="text" class="form-control input-sm" id="inputNumMax" maxlength="5" /><br /></td>
-                                <th><label class="control-label">Input Max Number <i class="glyphicon glyphicon-info-sign" title="This input controls the upper bound value for integers being generated in the input."></i></label></th>
+                                <td> <input type="text" class="form-control input-sm" id="inputNumMax" name="inputNumMax"  maxlength="5" /><br /></td>
+                                <th><label class="control-label" for="inputNumMax">Input Max Number <i class="glyphicon glyphicon-info-sign" title="This input controls the upper bound value for integers being generated in the input."></i></label></th>
                             </tr>
                             <tr>
-                                <td> <input type="text" class="form-control input-sm" id="inputNumRuns" maxlength="4"/><br /></td>
-                                <th><label class="control-label">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
+                                <td> <input type="text" class="form-control input-sm" id="inputNumRuns" name="inputNumRuns"  maxlength="4"/><br /></td>
+                                <th><label class="control-label" for="inputNumRuns">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
                             </tr>
                         </table>
+                        <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
                         <div class="checkbox">
                             <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label><br>
                         </div>
-                        <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
                         <div class="checkbox" id="compareWithDiv"><br />
                             <p>Compare With:</p>
                             <label><input type="checkbox" class="compareWithCheck" name="sort" value="insertionSort"> <span>Insertion Sort</span></label><br>
                             <label><input type="checkbox" class="compareWithCheck" name="sort" value="mergeSort"> <span>Merge Sort</span></label><br>
                             <label><input type="checkbox" class="compareWithCheck" name="sort" value="bubbleSort"> <span>Bubble Sort</span></label><br>
                             <label><input type="checkbox" class="compareWithCheck" name="sort" value="quickSort"> <span>Quick Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="selectionSort"> <span>Selection Sort</span></label><br>
                         </div>
 
                     </div>

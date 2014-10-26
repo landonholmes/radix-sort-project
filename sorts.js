@@ -127,6 +127,34 @@ function partition(arr, left, right)
             j--;
         }
     }
-
     return i;
+}
+
+/*selectionSort*/
+function selectionSort(arr){
+
+    var len = arr.length,
+        min,
+        i,
+        j;
+
+    for (i=0; i < len; i++){
+        /*set min*/
+        min = i;
+
+        /*loop through array and check for smaller*/
+        for (j=i+1; j < len; j++){
+            if (arr[j] < arr[min]){
+                min = j;
+            }
+        }
+
+        /*if it isnt the min, swap*/
+        if (i != min){
+            var temp = arr[i];
+            arr[i] = arr[min];
+            arr[min] = temp;
+        }
+    }
+    return arr;
 }

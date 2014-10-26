@@ -1,4 +1,4 @@
-/*global $,console*/
+/*global $,console,_*/
 /*variables*/
 var logDiv = $("div#log"),
     mainButton = $("button#main"),
@@ -11,8 +11,8 @@ var logDiv = $("div#log"),
     inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
     inputCompareWithCheck = $("input.compareWithCheck");
 
-var DEFAULT_INPUT_LENGTH = 2000,
-    DEFAULT_INPUT_INTEGER_MAX = 2000,
+var DEFAULT_INPUT_LENGTH = 1000,
+    DEFAULT_INPUT_INTEGER_MAX = 1000,
     DEFAULT_INPUT_NUMBER_RUNS = 100,
     TIMER_ACCURACY = 1000,
     inputLength = checkLocalStorage("inputLength", DEFAULT_INPUT_LENGTH),
@@ -22,7 +22,7 @@ var DEFAULT_INPUT_LENGTH = 2000,
     seeArrays = checkLocalStorage("seeArrays",JSON.stringify(true)),
     currArr, /*global variable to keep track of current array*/
     compareWithChecks = checkLocalStorage("compareWithChecks",[]), /*variable to keep track of which other sorts to compare with*/
-    compareWithTimes = {}; /*variable to keep track of times of compared sorts*/
+    compareWithTimes = []; /*variable to keep track of times of compared sorts*/
 
     /*when the page is loaded, run this stuff*/
 $(document).ready( function() {
@@ -47,24 +47,24 @@ $(document).ready( function() {
     resetInputsButton.bind("click", resetInputs);
     $("input").bind("keypress", checkInput);
 
-    inputLenField.bind("keyup", function(e){
+    inputLenField.bind("keyup", function(){
         inputLength = $(this).val();
         localStorage.setItem("inputLength",$(this).val());
 
     });
-    inputNumMaxField.bind("keyup", function(e){
+    inputNumMaxField.bind("keyup", function(){
         inputIntegerMax = $(this).val();
         localStorage.setItem("inputIntegerMax",$(this).val());
     });
-    inputNumRunsField.bind("keyup", function(e){
+    inputNumRunsField.bind("keyup", function(){
         inputNumberRuns = $(this).val();
         localStorage.setItem("inputNumberRuns",$(this).val());
     });
-    inputSeeArraysCheckbox.bind("change", function(e){
+    inputSeeArraysCheckbox.bind("change", function(){
         seeArrays = inputSeeArraysCheckbox.prop("checked");
         localStorage.setItem("seeArrays",JSON.stringify(inputSeeArraysCheckbox.prop("checked")));
     });
-    inputCompareWithCheck.bind("change", function(e){
+    inputCompareWithCheck.bind("change", function(){
         checked = inputCompareWithCheck.filter(":checked");
         compareWithChecks = []; /*reset function names to compare with*/
         for (var i=0; i < checked.length; i++) {
@@ -79,8 +79,7 @@ function main()
 {
     currArr = genInput();
 
-    compareWithTimes = {}; /*clear this out*/
-    compareWithTimes.length = 0; /*clear this out*/
+    compareWithTimes = []; /*clear this out*/
 
     var tempArr = currArr.slice();
     doSort(tempArr, radixSort);
@@ -90,11 +89,12 @@ function main()
 
     if (compareWithTimes.length > 1)
     {
+        compareWithTimes = _.sortBy(compareWithTimes, 'timeTaken');
         log("Time Comparison: ");
         /*loop through times to display*/
         $.each(compareWithTimes, function(key,value){
             if (key != "length") {
-                log(key,": ", value.timeTaken);
+                log(value.name,": sorted in ", value.timeTaken, "ms");
             }
         });
     }
@@ -115,7 +115,7 @@ function doSort(arr, sort)
     var timeTaken = 0; /*variable used to calculate avg time taken based on inputNumberRuns */
 
     for (var i=0; i< inputNumberRuns; i++) {
-        tempArr = currArr.slice(); /*make a copy of the original*/
+        tempArr = arr.slice(); /*make a copy of the original*/
 
         /*sort the copy however many times*/
         var before = performance.now();
@@ -134,9 +134,7 @@ function doSort(arr, sort)
     logDiv.append('<hr class="log'+currentLog+'" />');
 
     /*add an entry for sort to the timing log*/
-    compareWithTimes[sort.name] = {"timeTaken": displayTimer(timeTaken)};
-    compareWithTimes.length ++;
-
+    compareWithTimes.push({"name":sort.name,"timeTaken": Math.floor((timeTaken) * TIMER_ACCURACY) / TIMER_ACCURACY});
 }
 
 /*counting sort function*/
@@ -306,6 +304,7 @@ function checkInput(e)
     }
 }
 
+/*function to reset all inputs back to defaults, even the local storage*/
 function resetInputs()
 {
     inputLength = DEFAULT_INPUT_LENGTH;
