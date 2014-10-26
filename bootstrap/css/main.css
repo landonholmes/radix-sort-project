@@ -73,6 +73,15 @@ body {
     border-radius: 0;
 }
 
+table#buttonTable td {
+    padding: 5px;
+    text-align: center;
+}
+
+table#buttonTable td button {
+   width: 100%;
+}
+
 table#inputTable th {
     width: 70%;
     padding-bottom: 15px;

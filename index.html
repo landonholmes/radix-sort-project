@@ -33,10 +33,18 @@
 				<div class="col-md-3">
                     <h3>Controls:</h3>
                     <div id="controls">
-                        <button id="main" class="btn btn-primary btn-sm" title="Run Radix sort with the current input constraints.">Run</button>
-                        <button id="clean" class="btn btn-primary btn-sm" title="Clear the log">Clear Log</button>
-                        <button id="cleanKeepLast" class="btn btn-primary btn-sm" title="Clear the log but keep the last entry">Clear (Keep Last)</button>
-                        <br /><br />
+                        <table id="buttonTable">
+                            <tr>
+                                 <td><button id="main" class="btn btn-primary btn-sm" title="Run Radix sort with the current input constraints.">Run</button></td>
+                                 <td><button id="clean" class="btn btn-primary btn-sm" title="Clear the log">Clear Log</button></td>
+                            </tr>
+                            <tr>
+                                <td><button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button></td>
+                                <td><button id="cleanKeepLast" class="btn btn-primary btn-sm" title="Clear the log but keep the last entry">Clear (Keep Last)</button></td>
+                            </tr>
+                        </table>
+
+                        <br />
                         <table id="inputTable">
                             <tr>
                                 <td><input type="text" class="form-control input-sm" id="inputLen" name="inputLen" maxlength="5" /><br /></td>
@@ -51,7 +59,7 @@
                                 <th><label class="control-label" for="inputNumRuns">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
                             </tr>
                         </table>
-                        <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
+
                         <div class="checkbox">
                             <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label>
                         </div>
