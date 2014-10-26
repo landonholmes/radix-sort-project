@@ -54,7 +54,13 @@
                         </table>
                         <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
                         <div class="checkbox">
-                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label><br>
+                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label>
+                        </div>
+                        <div class="radio">
+                            <p>Input Order:</p>
+                            <label title="Check this box for the arrays to be random"><input type="radio" class="inputOrder" name="inputOrder" value="random"> <span>Input Random</span></label><br>
+                            <label title="Check this box for the arrays to be sorted by default"><input type="radio" class="inputOrder" name="inputOrder" value="ordered"> <span>Input Ordered</span></label><br>
+                            <label title="Check this box for the arrays to be sorted backwards by default"><input type="radio" class="inputOrder" name="inputOrder" value="orderedBackwards"> <span>Input Ordered Backwards</span></label><br>
                         </div>
                         <div class="checkbox" id="compareWithDiv"><br />
                             <p>Compare With:</p>

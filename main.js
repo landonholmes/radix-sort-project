@@ -9,6 +9,7 @@ var logDiv = $("div#log"),
     inputNumMaxField = $("input#inputNumMax"),
     inputNumRunsField = $("input#inputNumRuns"),
     inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
+    inputOrderRadios = $("input.inputOrder"),
     inputCompareWithCheck = $("input.compareWithCheck");
 
 var DEFAULT_INPUT_LENGTH = 1000,
@@ -20,6 +21,7 @@ var DEFAULT_INPUT_LENGTH = 1000,
     inputNumberRuns = checkLocalStorage("inputNumberRuns",DEFAULT_INPUT_NUMBER_RUNS),
     currentLog = 1,
     seeArrays = checkLocalStorage("seeArrays",JSON.stringify(true)),
+    inputOrder = checkLocalStorage("inputOrder","random"),
     currArr, /*global variable to keep track of current array*/
     compareWithChecks = checkLocalStorage("compareWithChecks",[]), /*variable to keep track of which other sorts to compare with*/
     compareWithTimes = []; /*variable to keep track of times of compared sorts*/
@@ -38,6 +40,7 @@ $(document).ready( function() {
     if (seeArrays) {
         inputSeeArraysCheckbox.prop('checked',true);
     }
+    inputOrderRadios.filter('[value='+inputOrder+']').prop('checked',true);
 
 
     /*some event binders*/
@@ -59,6 +62,10 @@ $(document).ready( function() {
     inputNumRunsField.bind("keyup", function(){
         inputNumberRuns = $(this).val();
         localStorage.setItem("inputNumberRuns",$(this).val());
+    });
+    inputOrderRadios.bind("change", function(){
+        inputOrder = $(this).val();
+        localStorage.setItem("inputOrder",JSON.stringify($(this).val()));
     });
     inputSeeArraysCheckbox.bind("change", function(){
         seeArrays = inputSeeArraysCheckbox.prop("checked");
@@ -90,7 +97,7 @@ function main()
     if (compareWithTimes.length > 1)
     {
         compareWithTimes = _.sortBy(compareWithTimes, 'timeTaken');
-        log("Time Comparison: ");
+        log("Time Comparison: (input order: ",inputOrder,")");
         /*loop through times to display*/
         $.each(compareWithTimes, function(key,value){
             if (key != "length") {
@@ -203,6 +210,12 @@ function genInput()
         n.push(Math.floor(Math.random() * inputIntegerMax));
     }
 
+    switch(inputOrder) {
+        case "ordered": {n=radixSort(n); break;} /*if input is to be ordered first*/
+        case "orderedBackwards": {n = radixSort(n).reverse(); break;}  /*if input is to be ordered backwards*/
+        case "default": { break;} /*random*/
+    }
+
     return n;
 }
 
@@ -311,18 +324,21 @@ function resetInputs()
     inputIntegerMax = DEFAULT_INPUT_INTEGER_MAX;
     inputNumberRuns = DEFAULT_INPUT_NUMBER_RUNS;
     seeArrays = true;
+    inputOrder = "random";
     compareWithChecks = [];
 
     localStorage.setItem("inputLength",inputLength);
     localStorage.setItem("inputIntegerMax",inputIntegerMax);
     localStorage.setItem("inputNumberRuns",inputNumberRuns);
     localStorage.setItem("seeArrays",JSON.stringify(seeArrays));
+    localStorage.setItem("inputOrder",inputOrder);
     localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
 
     inputLenField.val(inputLength);
     inputNumMaxField.val(inputIntegerMax);
     inputNumRunsField.val(inputNumberRuns);
     inputSeeArraysCheckbox.prop('checked',true);
+    inputOrderRadios.filter('[value='+inputOrder+']').prop('checked',true);
     inputCompareWithCheck.prop('checked',false);
 }
 
