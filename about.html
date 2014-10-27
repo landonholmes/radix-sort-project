@@ -4,19 +4,18 @@
     <meta charset="utf-8">
     <meta name="description" content="For my algorithms project: Radix Sorting using JavaScript">
     <meta name="author" content="Landon Holmes">
-    <link rel="icon" href="./favicon.ico">
+    <link rel="icon" href="./favicon.ico?v3">
 
     <title>Radix Sorting</title>
 
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="bootstrap/css/main.css" rel="stylesheet">
     <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
 
 </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html" style="color: white">Algorithms: Radix Sort</a>
@@ -34,7 +33,7 @@
                     <h3>About The Project:</h3>
                     <p>
                         This project is Radix Sort coded using JavaScript and HTML/CSS.
-                        It makes use of the JQuery JavaScript library,
+                        It makes use of the JQuery and Underscore.js JavaScript libraries,
                         concepts such as local storage (way better than cookies) and
                         the window.performance system for accurate algorithm timing.
                     </p>
@@ -49,19 +48,51 @@
                         The user is given the option to change these parameters and re-run the sort
                         using the new parameters along with a few controls on what is currently displayed
                         in the log window. The reset button will reset the inputs back to the defaults of
-                        2000, 2000, 100. Hitting enter inside of an input will run the sort with the current
-                        input values.
+                        <span id="DEFAULT_INPUT_LENGTH"></span>, <span id="DEFAULT_INPUT_INTEGER_MAX"></span>, and <span id="DEFAULT_INPUT_NUMBER_RUNS"></span>. Hitting enter inside of an input will run the sort with the current
+                        input values. There is a checkbox to control whether or not the arrays being sorted are displayed before and after sorting.
+                        It is helpful to disable this display if the user has already seen that the sorting works on the input.
+                    </p>
+                    <p>
+                        The radio buttons control how the input array is generated. The default is that the input is random.
+                        The user is able to choose if the input should be ordered or ordered backwards by default.
+                    </p>
+                    <p>
+                        There are also checkboxes that enable the user to choose different comparison sorts to also run
+                        on the given input. If any of these options are chosen, they will display the sorting being done
+                        and the log will include an extra section showing an ordered list of the sorting runtimes.
+                        This allows the user to compare against a few other sorts to see what input runs best with which sort.
+                    </p>
+                    <p>
+                        If more than one sort is chosen to compare against, below the log there will be a bar graph
+                        showing a visual representation of the run times for each sort.
                     </p>
                     <p>
                         Some links to tools used:
-                        <ul>
-                            <li><a href="http://getbootstrap.com/">Twitter Bootstrap</a> for styling</li>
-                            <li><a href="http://jquery.com/">JQuery</a> for conciseness</li>
-                            <!--<li><a href="http://www.chartjs.org/">Chart.js</a></li>-->
-                        </ul>
                     </p>
+                    <ul>
+                        <li><a href="http://getbootstrap.com/">Twitter Bootstrap</a> for styling</li>
+                        <li><a href="http://jquery.com/">JQuery</a> for conciseness</li>
+                        <li><a href="http://underscorejs.org/">Underscore.js</a> for utility</li>
+                        <li><a href="http://www.chartjs.org/">Chart.js</a> for charts</li>
+                    </ul>
+
                 </div>
             </div>
         </div>
+
+        <script>
+            /*this will grab the default values and place them into the paragraph so they aren't just static text*/
+            $(document).ready( function() {
+                $("span#DEFAULT_INPUT_LENGTH").text(DEFAULT_INPUT_LENGTH);
+                $("span#DEFAULT_INPUT_INTEGER_MAX").text(DEFAULT_INPUT_INTEGER_MAX);
+                $("span#DEFAULT_INPUT_NUMBER_RUNS").text(DEFAULT_INPUT_NUMBER_RUNS);
+
+
+            });
+        </script>
+
+        <!--include the javascript-->
+        <script src="sorts.js" ></script>
+        <script src="main.js" ></script>
     </body>
 </html>

@@ -4,19 +4,20 @@
         <meta charset="utf-8">
         <meta name="description" content="For my algorithms project: Radix Sorting using JavaScript">
         <meta name="author" content="Landon Holmes">
-        <link rel="icon" href="./favicon.ico">
+        <link rel="icon" href="./favicon.ico?v3">
 
         <title>Radix Sorting</title>
 
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
         <link href="bootstrap/css/main.css" rel="stylesheet">
         <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
+        <script src="bootstrap/js/underscore-min.js"></script>
+        <script src="bootstrap/js/Chart.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	</head>
 	<body>
-		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
                     <a class="navbar-brand" href="index.html" style="color: white">Algorithms: Radix Sort</a>
@@ -33,37 +34,67 @@
 				<div class="col-md-3">
                     <h3>Controls:</h3>
                     <div id="controls">
-                        <button id="main" class="btn btn-primary btn-sm" title="Run Radix sort with the current input constraints.">Run</button>
-                        <button id="clean" class="btn btn-primary btn-sm" title="Clear the log">Clear Log</button>
-                        <button id="cleanKeepLast" class="btn btn-primary btn-sm" title="Clear the log but keep the last entry">Clear (Keep Last)</button>
-                        <br /><br />
-                        <table id="inputTable">
+                        <table id="buttonTable">
                             <tr>
-                                <td><input type="text" class="form-control input-sm" id="inputLen" maxlength="5" /><br /></td>
-                                <th><label class="control-label">Input Array Length <i class="glyphicon glyphicon-info-sign" title="This input controls the length of the input array that will be generated."></i></label></th>
+                                 <td><button id="main" class="btn btn-primary btn-sm" title="Run Radix sort with the current input constraints.">Run</button></td>
+                                 <td><button id="clean" class="btn btn-primary btn-sm" title="Clear the log">Clear Log</button></td>
                             </tr>
                             <tr>
-                                <td> <input type="text" class="form-control input-sm" id="inputNumMax" maxlength="5" /><br /></td>
-                                <th><label class="control-label">Input Max Number <i class="glyphicon glyphicon-info-sign" title="This input controls the upper bound value for integers being generated in the input."></i></label></th>
-                            </tr>
-                            <tr>
-                                <td> <input type="text" class="form-control input-sm" id="inputNumRuns" maxlength="4"/><br /></td>
-                                <th><label class="control-label">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
+                                <td><button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button></td>
+                                <td><button id="cleanKeepLast" class="btn btn-primary btn-sm" title="Clear the log but keep the last entry">Clear (Keep Last)</button></td>
                             </tr>
                         </table>
-                        <button id="resetInputs" class="btn btn-primary btn-sm" title="Reset values to defaults">Reset</button>
+
+                        <br />
+                        <table id="inputTable">
+                            <tr>
+                                <td><input type="text" class="form-control input-sm" id="inputLen" name="inputLen" maxlength="5" /><br /></td>
+                                <th><label class="control-label" for="inputLen">Input Array Length <i class="glyphicon glyphicon-info-sign" title="This input controls the length of the input array that will be generated."></i></label></th>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-control input-sm" id="inputNumMax" name="inputNumMax"  maxlength="5" /><br /></td>
+                                <th><label class="control-label" for="inputNumMax">Input Max Number <i class="glyphicon glyphicon-info-sign" title="This input controls the upper bound value for integers being generated in the input."></i></label></th>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-control input-sm" id="inputNumRuns" name="inputNumRuns"  maxlength="4"/><br /></td>
+                                <th><label class="control-label" for="inputNumRuns">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
+                            </tr>
+                        </table>
+
+                        <div class="checkbox">
+                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays When Run</span></label>
+                        </div>
+                        <div class="radio">
+                            <p title="This input controls how the input order is generated.">Input Order: <i class="glyphicon glyphicon-info-sign"></i></p>
+                            <label title="Check this box for the arrays to be random"><input type="radio" class="inputOrder" name="inputOrder" value="random"> <span>Input Random</span></label><br>
+                            <label title="Check this box for the arrays to be sorted by default"><input type="radio" class="inputOrder" name="inputOrder" value="ordered"> <span>Input Ordered</span></label><br>
+                            <label title="Check this box for the arrays to be sorted backwards by default"><input type="radio" class="inputOrder" name="inputOrder" value="orderedBackwards"> <span>Input Ordered Backwards</span></label><br>
+                        </div>
+                        <div class="checkbox" id="compareWithDiv"><br />
+                            <p title="This input controls which other sorts Radix Sort will be compared to">Compare With:  <i class="glyphicon glyphicon-info-sign"></i></p>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="insertionSort"> <span>Insertion Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="mergeSort"> <span>Merge Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="bubbleSort"> <span>Bubble Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="quickSort"> <span>Quick Sort</span></label><br>
+                            <label><input type="checkbox" class="compareWithCheck" name="sort" value="selectionSort"> <span>Selection Sort</span></label><br>
+                        </div>
 
                     </div>
 				</div>
                 <div class="col-md-9">
                     <h3>Log:</h3>
-                    <div id="log" style="overflow:scroll; height:500px;">
+                    <div id="log" style="overflow:scroll; height:525px;">
+
+                    </div>
+                    <!--add a canvas to draw the charts on-->
+                    <div id="canvasContainer">
 
                     </div>
                 </div>
 			</div>
 		</div>
 
+        <script src="sorts.js" ></script>
         <script src="main.js" ></script>
 	</body>
 </html>
