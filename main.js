@@ -97,7 +97,7 @@ function main()
     currArr = genInput();  /*generate the input*/
 
     compareWithTimes = []; /*clear this out*/
-    canvasContainer.html(CANVAS_OBJECT); //overwrite canvas
+    canvasContainer.html(""); //clear
 
     var tempArr = currArr.slice();   /*put array in temp array to preserve global variable*/
     doSort(tempArr, radixSort); /*do the radix sort*/
@@ -119,6 +119,7 @@ function main()
         });
 
         /*if we are comparing times, let's do a chart*/
+        canvasContainer.html(CANVAS_OBJECT); //overwrite canvas
         drawChart();
     }
 
