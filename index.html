@@ -12,7 +12,6 @@
         <link href="bootstrap/css/main.css" rel="stylesheet">
         <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
         <script src="bootstrap/js/underscore-min.js"></script>
-        <script src="bootstrap/js/Chart.min.js"></script>
         <script src="bootstrap/js/bootstrap.min.js"></script>
 
 	</head>
@@ -52,17 +51,17 @@
                                 <th><label class="control-label" for="inputLen">Input Array Length <i class="glyphicon glyphicon-info-sign" title="This input controls the length of the input array that will be generated."></i></label></th>
                             </tr>
                             <tr>
-                                <td><input type="text" class="form-control input-sm" id="inputNumMax" name="inputNumMax"  maxlength="5" /><br /></td>
+                                <td> <input type="text" class="form-control input-sm" id="inputNumMax" name="inputNumMax"  maxlength="5" /><br /></td>
                                 <th><label class="control-label" for="inputNumMax">Input Max Number <i class="glyphicon glyphicon-info-sign" title="This input controls the upper bound value for integers being generated in the input."></i></label></th>
                             </tr>
                             <tr>
-                                <td><input type="text" class="form-control input-sm" id="inputNumRuns" name="inputNumRuns"  maxlength="4"/><br /></td>
+                                <td> <input type="text" class="form-control input-sm" id="inputNumRuns" name="inputNumRuns"  maxlength="4"/><br /></td>
                                 <th><label class="control-label" for="inputNumRuns">Number of Runs to Avg <i class="glyphicon glyphicon-info-sign" title="This input controls the number of times the sort will be run on the generated input to create an average time taken."></i></label></th>
                             </tr>
                         </table>
 
                         <div class="checkbox">
-                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays When Run</span></label>
+                            <label title="Check this box for the arrays to be displayed in the log, uncheck to hide them"><input type="checkbox" id="seeArraysCheckbox" name="sort" value="seeArrays"> <span>Display Arrays</span></label>
                         </div>
                         <div class="radio">
                             <p title="This input controls how the input order is generated.">Input Order: <i class="glyphicon glyphicon-info-sign"></i></p>
@@ -84,10 +83,6 @@
                 <div class="col-md-9">
                     <h3>Log:</h3>
                     <div id="log" style="overflow:scroll; height:525px;">
-
-                    </div>
-                    <!--add a canvas to draw the charts on-->
-                    <div id="canvasContainer">
 
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-/*global $,console,_, Chart*/
+/*global $,console,_*/
 /*variables*/
 var logDiv = $("div#log"),
     mainButton = $("button#main"),
@@ -10,13 +10,11 @@ var logDiv = $("div#log"),
     inputNumRunsField = $("input#inputNumRuns"),
     inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
     inputOrderRadios = $("input.inputOrder"),
-    inputCompareWithCheck = $("input.compareWithCheck"),
-    canvasContainer = $("div#canvasContainer");
+    inputCompareWithCheck = $("input.compareWithCheck");
 
 var DEFAULT_INPUT_LENGTH = 1000,
     DEFAULT_INPUT_INTEGER_MAX = 1000,
     DEFAULT_INPUT_NUMBER_RUNS = 100,
-    CANVAS_OBJECT = '<br/><p>Time Taken By Each Sort</p><table><tr><td>Time Taken (ms)&nbsp;&nbsp;</td><td><canvas id="myChart" width="600" height="400"></canvas></td><tr><tr><td colspan="2">Sort</td></tr></table>',
     TIMER_ACCURACY = 1000,
     inputLength = checkLocalStorage("inputLength", DEFAULT_INPUT_LENGTH),
     inputIntegerMax = checkLocalStorage("inputIntegerMax", DEFAULT_INPUT_INTEGER_MAX),
@@ -97,7 +95,6 @@ function main()
     currArr = genInput();  /*generate the input*/
 
     compareWithTimes = []; /*clear this out*/
-    canvasContainer.html(CANVAS_OBJECT); //overwrite canvas
 
     var tempArr = currArr.slice();   /*put array in temp array to preserve global variable*/
     doSort(tempArr, radixSort); /*do the radix sort*/
@@ -117,9 +114,6 @@ function main()
         $.each(compareWithTimes, function(key,value){
             log(value.name,": sorted in ", value.timeTaken, "ms"); /*show time for specific sort*/
         });
-
-        /*if we are comparing times, let's do a chart*/
-        drawChart();
     }
 
     /*increment the current log*/
@@ -375,52 +369,6 @@ function resetInputs()
 function getFunctionByName(functionName)
 {
     return window[functionName];
-}
-
-/*function to draw a chart, calling this will redraw over the current chart*/
-function drawChart()
-{
-    var data = {
-        labels: [],
-        datasets: []
-    }; //creating the data struct for the chart
-    var datasetTimeTaken = [];
-
-    $.each(compareWithTimes, function(key,value){
-        data.labels.push(value.name);
-        datasetTimeTaken.push(value.timeTaken);
-    });
-
-    /*making the dataset of the data struct for the chart*/
-    var dataset = {
-        label: "Time Taken For Each Sort",
-        fillColor: "rgba(151,187,205,0.5)",
-        strokeColor: "rgba(151,187,205,0.8)",
-        highlightFill: "rgba(151,187,205,0.75)",
-        highlightStroke: "rgba(151,187,205,1)",
-        data: datasetTimeTaken
-    };
-    data.datasets.push(dataset);
-
-    var ctx = $("#myChart").get(0).getContext("2d");
-
-    var options = {
-        scaleBeginAtZero : true,
-        scaleShowGridLines : true,
-        scaleGridLineColor : "rgba(0,0,0,.05)",
-        scaleGridLineWidth : 1,
-        barShowStroke : true,
-        barStrokeWidth : 2,
-        barValueSpacing : 5,
-        barDatasetSpacing : 1,
-        multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
-        //legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
-
-    };
-
-    var barChart = new Chart(ctx).Bar(data);
-
-
 }
 
 
