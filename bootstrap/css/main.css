@@ -101,3 +101,8 @@ table#inputTable td input {
 div#compareWithDiv label span {
     padding-bottom: 150px;
 }
+
+div#canvasContainer {
+    text-align: center;
+    padding: 10px;
+}
