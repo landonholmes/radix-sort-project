@@ -319,11 +319,15 @@ function displayTimer(before, after)
 /*checks local storage for a variable and returns it if it finds it or returns null if not*/
 function checkLocalStorage(name, defaultValue)
 {
-    if (localStorage.getItem(name) != null) { /*if we find the entry in localStorage*/
-        return JSON.parse(localStorage.getItem(name)); /*retrieve and return the found entry*/
-    } else { /*entry not found*/
-        localStorage.setItem(name, JSON.stringify(defaultValue)); /*create the entry*/
-        return defaultValue; /*return it after creating it*/
+    if (localStorage != null) {
+        if (localStorage.getItem(name) != null) { /*if we find the entry in localStorage*/
+            return JSON.parse(localStorage.getItem(name)); /*retrieve and return the found entry*/
+        } else { /*entry not found*/
+            localStorage.setItem(name, JSON.stringify(defaultValue)); /*create the entry*/
+            return defaultValue; /*return it after creating it*/
+        }
+    } else {
+        return defaultValue;
     }
 }
 
@@ -420,8 +424,6 @@ function drawChart()
     };
 
     var barChart = new Chart(ctx).Bar(data);
-
-
 }
 
 
