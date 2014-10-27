@@ -50,7 +50,7 @@
                         The user is given the option to change these parameters and re-run the sort
                         using the new parameters along with a few controls on what is currently displayed
                         in the log window. The reset button will reset the inputs back to the defaults of
-                        <span id="DEFAULT_INPUT_LENGTH"></span>, <span id="DEFAULT_INPUT_INTEGER_MAX"></span>, and <span id="DEFAULT_INPUT_NUMBER_RUNS"></span>. Hitting enter inside of an input will run the sort with the current
+                        <span id="DEFAULT_INPUT_LENGTH">1000</span>, <span id="DEFAULT_INPUT_INTEGER_MAX">1000</span>, and <span id="DEFAULT_INPUT_NUMBER_RUNS">100</span>. Hitting enter inside of an input will run the sort with the current
                         input values. There is a checkbox to control whether or not the arrays being sorted are displayed before and after sorting.
                         It is helpful to disable this display if the user has already seen that the sorting works on the input.
                     </p>
@@ -78,9 +78,21 @@
                         <li><a href="http://www.chartjs.org/">Chart.js</a> for charts</li>
                     </ul>
 
+                    <p>
+                        Get the .js files (right-click save as or just left click to view):
+                    </p>
+                    <ul>
+                        <li><a href="sorts.js">Sorts.js</li>
+                        <li><a href="main.js">Main.js</li>
+                    </ul>
+
                 </div>
             </div>
         </div>
+
+        <!--include the javascript-->
+        <script src="sorts.js" ></script>
+        <script src="main.js" ></script>
 
         <script>
             /*this will grab the default values and place them into the paragraph so they aren't just static text*/
@@ -88,13 +100,9 @@
                 $("span#DEFAULT_INPUT_LENGTH").text(DEFAULT_INPUT_LENGTH);
                 $("span#DEFAULT_INPUT_INTEGER_MAX").text(DEFAULT_INPUT_INTEGER_MAX);
                 $("span#DEFAULT_INPUT_NUMBER_RUNS").text(DEFAULT_INPUT_NUMBER_RUNS);
-
-
             });
         </script>
 
-        <!--include the javascript-->
-        <script src="sorts.js" ></script>
-        <script src="main.js" ></script>
+
     </body>
 </html>
