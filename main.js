@@ -58,27 +58,27 @@ $(document).ready( function() {
     /*bind the input length field on keyup event*/
     inputLenField.bind("keyup", function(){
         inputLength = $(this).val(); /*set variable to value*/
-        localStorage.setItem("inputLength",$(this).val()); /*set the local storage*/
+        saveInLocalStorage("inputLength",$(this).val()); /*set the local storage*/
     });
     /*bind the inputNumMaxField on keyup event*/
     inputNumMaxField.bind("keyup", function(){
         inputIntegerMax = $(this).val(); /*set variable to value*/
-        localStorage.setItem("inputIntegerMax",$(this).val()); /*set the local storage*/
+        saveInLocalStorage("inputIntegerMax",$(this).val()); /*set the local storage*/
     });
     /*bind the inputNumRunsField on keyup event*/
     inputNumRunsField.bind("keyup", function(){
         inputNumberRuns = $(this).val(); /*set variable to value*/
-        localStorage.setItem("inputNumberRuns",$(this).val());  /*set the local storage*/
+        saveInLocalStorage("inputNumberRuns",$(this).val());  /*set the local storage*/
     });
     /*bind the inputOrderRadios on change event*/
     inputOrderRadios.bind("change", function(){
         inputOrder = $(this).val();  /*set variable to value*/
-        localStorage.setItem("inputOrder",JSON.stringify($(this).val()));  /*set the local storage*/
+        saveInLocalStorage("inputOrder",$(this).val());  /*set the local storage*/
     });
     /*bind the inputSeeArraysCheckbox on change event*/
     inputSeeArraysCheckbox.bind("change", function(){
         seeArrays = inputSeeArraysCheckbox.prop("checked"); /*set variable to value*/
-        localStorage.setItem("seeArrays",JSON.stringify(inputSeeArraysCheckbox.prop("checked")));  /*set the local storage*/
+        saveInLocalStorage("seeArrays",inputSeeArraysCheckbox.prop("checked"));  /*set the local storage*/
     });
     /*bind the inputCompareWithCheck on change event*/
     inputCompareWithCheck.bind("change", function(){
@@ -87,7 +87,7 @@ $(document).ready( function() {
         for (var i=0; i < checked.length; i++) {
             compareWithChecks.push(checked[i].value); /*add all the checked ones to function names*/
         }
-        localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));  /*set the local storage*/
+        saveInLocalStorage("compareWithChecks",compareWithChecks);  /*set the local storage*/
     });
 });
 
@@ -323,13 +323,24 @@ function checkLocalStorage(name, defaultValue)
         if (localStorage.getItem(name) != null) { /*if we find the entry in localStorage*/
             return JSON.parse(localStorage.getItem(name)); /*retrieve and return the found entry*/
         } else { /*entry not found*/
-            localStorage.setItem(name, JSON.stringify(defaultValue)); /*create the entry*/
+            saveInLocalStorage(name,defaultValue);
             return defaultValue; /*return it after creating it*/
         }
     } else {
         return defaultValue;
     }
 }
+
+/*wrapper function to save in the localStorage*/
+function saveInLocalStorage(name, value)
+{
+    try {
+       localStorage.setItem(name, JSON.stringify(value)); /*create the entry*/
+    } catch (any) {
+       console.log("save failed");
+    }
+}
+
 
 /*function to check input for non-numerics and block them*/
 function checkInput(e)
@@ -360,12 +371,20 @@ function resetInputs()
     compareWithChecks = [];
 
     /*reset localStorage values*/
-    localStorage.setItem("inputLength",inputLength);
+    saveInLocalStorage("inputLength",inputLength);
+    saveInLocalStorage("inputIntegerMax",inputIntegerMax);
+    saveInLocalStorage("inputNumberRuns",inputNumberRuns);
+    saveInLocalStorage("seeArrays",seeArrays);
+    saveInLocalStorage("inputOrder",inputOrder);
+    saveInLocalStorage("compareWithChecks",compareWithChecks);
+
+    /*reset localStorage values*/
+    /*localStorage.setItem("inputLength",inputLength);
     localStorage.setItem("inputIntegerMax",inputIntegerMax);
     localStorage.setItem("inputNumberRuns",inputNumberRuns);
     localStorage.setItem("seeArrays",JSON.stringify(seeArrays));
     localStorage.setItem("inputOrder",JSON.stringify(inputOrder));
-    localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));
+    localStorage.setItem("compareWithChecks",JSON.stringify(compareWithChecks));*/
 
     /*reset the html inputs*/
     inputLenField.val(inputLength);

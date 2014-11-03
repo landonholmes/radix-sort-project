@@ -106,3 +106,7 @@ div#canvasContainer {
     text-align: center;
     padding: 10px;
 }
+
+div#extraSpace {
+    height: 200px;
+}
