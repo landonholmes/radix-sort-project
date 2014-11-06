@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="For my algorithms project: Radix Sorting using JavaScript">
+    <meta name="author" content="Landon Holmes">
+    <link rel="icon" href="./favicon.ico?v4">
+
+    <title>Radix Sorting</title>
+
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap/css/main.css" rel="stylesheet">
+    <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/underscore-min.js"></script>
+    <script src="bootstrap/js/Chart.min.js"></script>
+
+    <!--jasmine includes-->
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine/jasmine.css">
+    <script type="text/javascript" src="jasmine/lib/jasmine/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine/boot.js"></script>
+
+    <script src="jasmine/lib/matchers/jasmine-matchers.js"></script>
+
+
+    <script src="main.js" ></script>
+    <script src="sorts.js" ></script>
+
+    <!--including the spec files-->
+    <script type="text/javascript" src="jasmine/spec/mainSpec.js"></script>
+    <script type="text/javascript" src="jasmine/spec/sortsSpec.js"></script>
+
+
+    </head>
+    <body>
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="index.html" style="color: white">Algorithms: Radix Sort</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="tests.html">Tests</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+        <div class="container" role="main">
+            <div class="row">
+                <div class="col-md-12">
+
+                </div>
+            </div>
+        </div>
+
+        <!--just adding this to suppress an error, the charts is looking for this element-->
+        <div style="display: none;" id="canvasContainer"><canvas id="myChart" width="600" height="400"></canvas></div>
+
+
+    </body>
+</html>

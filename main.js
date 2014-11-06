@@ -11,6 +11,7 @@ var logDiv = $("div#log"),
     inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
     inputOrderRadios = $("input.inputOrder"),
     inputCompareWithCheck = $("input.compareWithCheck"),
+    loadingSpan = $("span#loading"),
     canvasContainer = $("div#canvasContainer");
 
 var DEFAULT_INPUT_LENGTH = 1000,
@@ -29,7 +30,10 @@ var DEFAULT_INPUT_LENGTH = 1000,
     compareWithTimes = []; /*variable to keep track of times of compared sorts*/
 
     /*when the page is loaded, run this stuff*/
-$(document).ready( function() {
+$(document).ready( function()
+{
+    "use strict";
+
     main();  /*call the main function*/
 
     /*populate input with variables*/
@@ -82,7 +86,7 @@ $(document).ready( function() {
     });
     /*bind the inputCompareWithCheck on change event*/
     inputCompareWithCheck.bind("change", function(){
-        checked = inputCompareWithCheck.filter(":checked"); /*set checked to checked boxes*/
+        var checked = inputCompareWithCheck.filter(":checked"); /*set checked to checked boxes*/
         compareWithChecks = []; /*reset function names to compare with*/
         for (var i=0; i < checked.length; i++) {
             compareWithChecks.push(checked[i].value); /*add all the checked ones to function names*/
@@ -94,6 +98,7 @@ $(document).ready( function() {
 /*the main function*/
 function main()
 {
+    "use strict";
     currArr = genInput();  /*generate the input*/
 
     compareWithTimes = []; /*clear this out*/
@@ -130,6 +135,7 @@ function main()
 /*wrapper function that will log the time taken to do a sort for an input*/
 function doSort(arr, sort)
 {
+    "use strict";
     log("Using <strong>",sort.name,"</strong>");
 
     /*check if they want to see the arrays*/
@@ -171,6 +177,7 @@ function doSort(arr, sort)
 /*counting sort function*/
 function countingSort(a, x)
 {
+    "use strict";
     var len = a.length; /*length of the array in a variable*/
     var c = [];  /*create the array of counts*/
     var b = []; /*create the output array*/
@@ -212,6 +219,7 @@ function countingSort(a, x)
 /*radix sort with counting sort subroutine*/
 function radixSort(arr)
 {
+    "use strict";
     var max = Math.max.apply(Math,arr); /*getting max value of the array*/
 
     /*do the loop for each digit*/
@@ -227,12 +235,13 @@ function radixSort(arr)
 /*function to generate an input based on the global variables*/
 function genInput()
 {
+    "use strict";
     var n = []; /*make an empty array*/
 
     /*loop to create a specific length array*/
     for(var i=0;i<inputLength;i++) {
         /*generate and add a random number between 0 and the max*/
-        n.push(Math.floor(Math.random() * inputIntegerMax));
+        n.push(Math.floor(Math.random() * inputIntegerMax +1));
     }
 
     /*check the order the user wants the input in, default is random*/
@@ -249,13 +258,14 @@ function genInput()
 /*helper function to display on the browser and console what is happening*/
 function log()
 {
+    "use strict";
     var toAppend = "";  /*create a toAppend string to avoid jquery parsing our strings to html too early*/
     toAppend += '<p class="log'+currentLog+'">'; /*start the log entry*/
     toAppend += formatTime(new Date())+' - '; /*add the timestamp*/
 
     /*append all the arguments*/
     for (var i = 0; i < arguments.length; i++) {
-        console.log(arguments[i]); /*console.log the argument*/
+        //console.log(arguments[i]); /*console.log the argument*/
         toAppend += arguments[i].toString(); /*add the argument to the log string*/
     }
     toAppend += '</p>'; /*close the p tag*/
@@ -267,18 +277,21 @@ function log()
 /*function to increment the log counter, might have other functionality*/
 function incrementLog()
 {
+    "use strict";
     currentLog++;
 }
 
 /*function to be called to clean up any messiness going on*/
 function cleanUp()
 {
+    "use strict";
     logDiv.empty();  /*empty the log*/
 }
 
 /*function to be called to clean up any messiness going on except the last log entry*/
 function cleanUpNotLast()
 {
+    "use strict";
     /*empty the log except for the most recent log entry*/
     logDiv.children().not(".log"+(currentLog-1)).remove();
 }
@@ -286,6 +299,7 @@ function cleanUpNotLast()
 /*function to format javascript timestamp correctly*/
 function formatTime(timestamp)
 {
+    "use strict";
     /*get each of the components of the timestamp*/
     var hours = timestamp.getHours();
     var minutes = timestamp.getMinutes();
@@ -307,6 +321,7 @@ function formatTime(timestamp)
 /*function to display the time*/
 function displayTimer(before, after)
 {
+    "use strict";
     /*if we give it just a length of time, format that*/
     if (arguments.length == 1) {
         return  "Sort Time Taken: "+Math.floor((before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
@@ -319,6 +334,7 @@ function displayTimer(before, after)
 /*checks local storage for a variable and returns it if it finds it or returns null if not*/
 function checkLocalStorage(name, defaultValue)
 {
+    "use strict";
     if (localStorage != null) {
         if (localStorage.getItem(name) != null) { /*if we find the entry in localStorage*/
             return JSON.parse(localStorage.getItem(name)); /*retrieve and return the found entry*/
@@ -334,6 +350,7 @@ function checkLocalStorage(name, defaultValue)
 /*wrapper function to save in the localStorage*/
 function saveInLocalStorage(name, value)
 {
+    "use strict";
     try {
        localStorage.setItem(name, JSON.stringify(value)); /*create the entry*/
     } catch (any) {
@@ -345,6 +362,7 @@ function saveInLocalStorage(name, value)
 /*function to check input for non-numerics and block them*/
 function checkInput(e)
 {
+    "use strict";
     var regex = new RegExp('^[0-9]+$'); /*regex to check for only numerical input*/
     var key = String.fromCharCode(!e.charCode ? e.which : e.charCode); /*get the key pressed from event*/
     var charCode = (!e.charCode ? e.which : e.charCode); /*get the character code*/
@@ -362,6 +380,7 @@ function checkInput(e)
 /*function to reset all inputs back to defaults, even the local storage*/
 function resetInputs()
 {
+    "use strict";
     /*set variables to defaults*/
     inputLength = DEFAULT_INPUT_LENGTH;
     inputIntegerMax = DEFAULT_INPUT_INTEGER_MAX;
@@ -398,12 +417,14 @@ function resetInputs()
 /*a function to call a specific function by name, works for window functions*/
 function getFunctionByName(functionName)
 {
+    "use strict";
     return window[functionName];
 }
 
 /*function to draw a chart, calling this will redraw over the current chart*/
 function drawChart()
 {
+    "use strict";
     var data = {
         labels: [],
         datasets: []

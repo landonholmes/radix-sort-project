@@ -12,6 +12,8 @@
     <link href="bootstrap/css/main.css" rel="stylesheet">
     <script src="bootstrap/js/jquery-2.1.1.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/underscore-min.js"></script>
+    <script src="bootstrap/js/Chart.min.js"></script>
 
 </head>
     <body>
@@ -23,6 +25,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="about.html">About</a></li>
+                        <li><a href="tests.html">Tests</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -76,19 +79,32 @@
                         <li><a href="http://jquery.com/">JQuery</a> for conciseness</li>
                         <li><a href="http://underscorejs.org/">Underscore.js</a> for utility</li>
                         <li><a href="http://www.chartjs.org/">Chart.js</a> for charts</li>
+                        <li><a href="http://jasmine.github.io/2.0/introduction.html">Jasmine</a> for verification</li>
+                        <li><a href="https://github.com/JamieMason/Jasmine-Matchers">Jasmine Matchers</a> for jasmine-matchers expansion</li>
                     </ul>
 
                     <p>
                         Get the .js files (right-click save as or just left click to view):
                     </p>
                     <ul>
-                        <li><a href="sorts.js">Sorts.js</li>
-                        <li><a href="main.js">Main.js</li>
+                        <li><a href="sorts.js">Sorts.js</a></li>
+                        <li><a href="main.js">Main.js</a></li>
+                    </ul>
+
+                    <p>
+                        Get the .js Jasmine tests:
+                    </p>
+                    <ul>
+                        <li><a href="jasmine/spec/mainSpec.js">mainSpec.js</a></li>
+                        <li><a href="jasmine/spec/sortsSpec.js">sortsSpec.js</a></li>
                     </ul>
 
                 </div>
             </div>
         </div>
+
+        <!--just adding this to suppress an error, the charts is looking for this element-->
+        <div style="display: none;" id="canvasContainer"><canvas id="myChart" width="600" height="400"></canvas></div>
 
         <!--include the javascript-->
         <script src="sorts.js" ></script>
