@@ -11,7 +11,7 @@ var logDiv = $("div#log"),
     inputSeeArraysCheckbox = $("input#seeArraysCheckbox"),
     inputOrderRadios = $("input.inputOrder"),
     inputCompareWithCheck = $("input.compareWithCheck"),
-    loadingSpan = $("span#loading"),
+    //loadingSpan = $("span#loading"),
     canvasContainer = $("div#canvasContainer");
 
 var DEFAULT_INPUT_LENGTH = 1000,
@@ -220,7 +220,7 @@ function countingSort(a, x)
 function radixSort(arr)
 {
     "use strict";
-    var max = Math.max.apply(Math,arr); /*getting max value of the array*/
+    var max = findMax(arr); /*getting max value of the array*/
 
     /*do the loop for each digit*/
     for (var x=1; Math.floor(max/x) > 0; x *= 10) {
@@ -253,6 +253,20 @@ function genInput()
 
     /*return the input*/
     return n;
+}
+
+
+/*function to find and return the max of the array*/
+function findMax(arr)
+{
+    "use strict";
+    var tempMax = -9007199254740992;//max integer value: 2^53 , see http://ecma262-5.com/ELS5_HTML.htm#Section_8.5
+    for (var i=0; i<arr.length; i++) {
+        if (arr[i] > tempMax) {
+            tempMax = arr[i];
+        }
+    }
+    return tempMax;
 }
 
 /*helper function to display on the browser and console what is happening*/
@@ -463,7 +477,7 @@ function drawChart()
 
     };
 
-    var barChart = new Chart(ctx).Bar(data);
+    new Chart(ctx).Bar(data,options);
 }
 
 

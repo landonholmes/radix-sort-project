@@ -1,7 +1,9 @@
 /*this file is for implementing other sorts for comparison against radix sort*/
+var sorts = {};
 
 function insertionSort(arr)
 {
+    "use strict";
     var value; /*variable to hold current compare value*/
 
     for (var i=0; i < arr.length; i++) {
@@ -76,6 +78,7 @@ function bubbleSort(arr)
 /*quickSort*/
 function quickSort(arr, left, right)
 {
+    "use strict";
     var index;
 
     /*make sure array has length*/
