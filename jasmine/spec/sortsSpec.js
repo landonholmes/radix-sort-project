@@ -19,16 +19,16 @@ describe("sorts", function() {
         it(sortingFunction+" will sort an array",function(){
             expect(getFunctionByName(sortingFunction)([9,5,3,7,1,2])).toEqual([1,2,3,5,7,9]);
         });
-        it(sortingFunction+"t will sort an already sorted array",function(){
+        it(sortingFunction+" will sort an already sorted array",function(){
             expect(getFunctionByName(sortingFunction)([1,2,3,5,7,9])).toEqual([1,2,3,5,7,9]);
         });
-        it(sortingFunction+"t will sort a reverse sorted array",function(){
+        it(sortingFunction+" will sort a reverse sorted array",function(){
             expect(getFunctionByName(sortingFunction)([9,7,5,3,2,1])).toEqual([1,2,3,5,7,9]);
         });
-        it(sortingFunction+"t will not break on an array of length 1",function(){
+        it(sortingFunction+" will not break on an array of length 1",function(){
             expect(getFunctionByName(sortingFunction)([1])).toEqual([1]);
         });
-        it(sortingFunction+"t will not break on an empty array",function(){
+        it(sortingFunction+" will not break on an empty array",function(){
             expect(getFunctionByName(sortingFunction)([])).toEqual([]);
         });
 
