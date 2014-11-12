@@ -503,48 +503,12 @@ function saveInLocalStorage(name, value)
 {
     "use strict";
     try {
-        throw {name: "Fuck you error"};
         localStorage.setItem(name, JSON.stringify(value)); /*create the entry*/
     } catch (any) {
-
-        console.log(any,": localStorage save failed, attempting cookie storage");
-        storeDataInCookie(name, value);
+        console.log("Error:",any,"-- localStorage save failed");
     }
 }
 radixApp.saveInLocalStorage = saveInLocalStorage;
 radixApp.saveInLocalStorage.name = "saveInLocalStorage";
 
-/*function to handle storing data in cookie, give a name of the cookie and the data*/
-function storeDataInCookie(name, data)
-{
-    "use strict";
 
-    var expire = new Date(); /*create the expire date*/
-    expire.setDate(expire.getDate() +30);
-    document.cookie = ""+name+'='+data+'; expires='+expire+'; path=/'; /*set the string for setting the cookie*/;
-    console.log(document.cookie);
-}
-radixApp.storeDataInCookie = storeDataInCookie;
-radixApp.storeDataInCookie.name = "storeDataInCookie";
-
-/*function used for loading variable from a cookie for a given name*/
-function loadDataFromCookie(name)
-{
-    "use strict";
-    /*fancy stuff going on*/
-    name = name+"=";
-    var cookieArray = document.cookie.split(';');
-    for(var i=0; i<cookieArray.length; i++) { /*loop over length of cookies that are split into an array*/
-        var cookie = cookieArray[i]; /*first cookie*/
-        while (cookie.charAt(0)==' ') { cookie = cookie.substring(1);  }/*strip out spaces*/
-        if (cookie.indexOf(name) != -1) { return cookie.substring(name.length,cookie.length); }  /*get the index of the end of the name, and return substring that is after that, which will be the value of the cookie*/
-    }
-    return ""; /*couldn't find cookie*/
-}
-radixApp.loadDataFromCookie = loadDataFromCookie;
-radixApp.loadDataFromCookie.name = "loadDataFromCookie";
-
-/*function to handle deleting a cookie, sets cookie to expired*/
-function deleteCookie(name) { "use strict"; document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/'; }
-radixApp.deleteCookie = deleteCookie;
-radixApp.deleteCookie.name = "deleteCookie";
