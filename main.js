@@ -1,4 +1,5 @@
 /*global $,console,_, Chart*/
+var radixApp = {};
 /*variables*/
 var logDiv = $("div#log"),
     mainButton = $("button#main"),
@@ -131,6 +132,8 @@ function main()
     /*increment the current log*/
     incrementLog();
 }
+var main = main;
+main.name = "main";
 
 /*wrapper function that will log the time taken to do a sort for an input*/
 function doSort(arr, sort)
@@ -173,6 +176,8 @@ function doSort(arr, sort)
     /*add an entry for sort to the timing log*/
     compareWithTimes.push({"name":sort.name,"timeTaken": Math.floor((timeTaken) * TIMER_ACCURACY) / TIMER_ACCURACY});
 }
+var doSort = doSort;
+doSort.name = "doSort";
 
 /*counting sort function*/
 function countingSort(a, x)
@@ -215,6 +220,8 @@ function countingSort(a, x)
     }
 
 }
+var countingSort = countingSort;
+countingSort.name = "countingSort";
 
 /*radix sort with counting sort subroutine*/
 function radixSort(arr)
@@ -230,6 +237,8 @@ function radixSort(arr)
     /*return the beautifully sorted array*/
     return arr;
 }
+var radixSort = radixSort;
+radixSort.name = "radixSort";
 
 /* ---------- some helper functions ---------- */
 /*function to generate an input based on the global variables*/
@@ -254,6 +263,8 @@ function genInput()
     /*return the input*/
     return n;
 }
+var genInput = genInput;
+genInput.name = "genInput";
 
 
 /*function to find and return the max of the array*/
@@ -268,6 +279,8 @@ function findMax(arr)
     }
     return tempMax;
 }
+var findMax = findMax;
+findMax.name = "findMax";
 
 /*helper function to display on the browser and console what is happening*/
 function log()
@@ -287,6 +300,8 @@ function log()
     /*after we pushed everything we want to the toAppend array, join it all together and append it*/
     logDiv.append(toAppend);
 }
+var log = log;
+log.name = "log";
 
 /*function to increment the log counter, might have other functionality*/
 function incrementLog()
@@ -294,6 +309,9 @@ function incrementLog()
     "use strict";
     currentLog++;
 }
+var incrementLog = incrementLog;
+incrementLog.name = "incrementLog";
+
 
 /*function to be called to clean up any messiness going on*/
 function cleanUp()
@@ -301,6 +319,8 @@ function cleanUp()
     "use strict";
     logDiv.empty();  /*empty the log*/
 }
+var cleanUp = cleanUp;
+cleanUp.name = "cleanUp";
 
 /*function to be called to clean up any messiness going on except the last log entry*/
 function cleanUpNotLast()
@@ -309,6 +329,8 @@ function cleanUpNotLast()
     /*empty the log except for the most recent log entry*/
     logDiv.children().not(".log"+(currentLog-1)).remove();
 }
+var cleanUpNotLast = cleanUpNotLast;
+cleanUpNotLast.name = "cleanUpNotLast";
 
 /*function to format javascript timestamp correctly*/
 function formatTime(timestamp)
@@ -331,6 +353,8 @@ function formatTime(timestamp)
     }
     return hours + ":" + minutes + ":" + seconds;
 }
+var formatTime = formatTime;
+formatTime.name = "formatTime";
 
 /*function to display the time*/
 function displayTimer(before, after)
@@ -344,6 +368,8 @@ function displayTimer(before, after)
         return  "Sort Time Taken: "+Math.floor((after-before) * TIMER_ACCURACY) / TIMER_ACCURACY+" ms";
     }
 }
+var displayTimer = displayTimer;
+displayTimer.name = "displayTimer";
 
 /*checks local storage for a variable and returns it if it finds it or returns null if not*/
 function checkLocalStorage(name, defaultValue)
@@ -360,6 +386,8 @@ function checkLocalStorage(name, defaultValue)
         return defaultValue;
     }
 }
+var checkLocalStorage = checkLocalStorage;
+checkLocalStorage.name = "checkLocalStorage";
 
 /*wrapper function to save in the localStorage*/
 function saveInLocalStorage(name, value)
@@ -371,6 +399,8 @@ function saveInLocalStorage(name, value)
        console.log("save failed");
     }
 }
+var saveInLocalStorage = saveInLocalStorage;
+saveInLocalStorage.name = "saveInLocalStorage";
 
 
 /*function to check input for non-numerics and block them*/
@@ -390,6 +420,8 @@ function checkInput(e)
         }
     }
 }
+var checkInput = checkInput;
+checkInput.name = "checkInput";
 
 /*function to reset all inputs back to defaults, even the local storage*/
 function resetInputs()
@@ -427,6 +459,8 @@ function resetInputs()
     inputOrderRadios.filter('[value='+inputOrder+']').prop('checked',true);
     inputCompareWithCheck.prop('checked',false);
 }
+var resetInputs = resetInputs;
+resetInputs.name = "resetInputs";
 
 /*a function to call a specific function by name, works for window functions*/
 function getFunctionByName(functionName)
@@ -434,6 +468,8 @@ function getFunctionByName(functionName)
     "use strict";
     return window[functionName];
 }
+var getFunctionByName = getFunctionByName;
+getFunctionByName.name = "getFunctionByName";
 
 /*function to draw a chart, calling this will redraw over the current chart*/
 function drawChart()
@@ -479,6 +515,8 @@ function drawChart()
 
     new Chart(ctx).Bar(data,options);
 }
+var drawChart = drawChart;
+drawChart.name = "drawChart";
 
 
 
