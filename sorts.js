@@ -20,8 +20,8 @@ function insertionSort(arr)
 
     return arr;
 }
-var insertionSort = insertionSort;
-insertionSort.name = "insertionSort";
+sorts.insertionSort = insertionSort;
+sorts.insertionSort.name = "insertionSort";
 
 /*mergeSort function*/
 function mergeSort(arr)
@@ -40,8 +40,8 @@ function mergeSort(arr)
     arr.splice.apply(arr, params);
     return arr;
 }
-var mergeSort = mergeSort;
-mergeSort.name = "mergeSort";
+sorts.mergeSort = mergeSort;
+sorts.mergeSort.name = "mergeSort";
 
 /*mergeSort helper function*/
 function merge(left, right)
@@ -60,8 +60,8 @@ function merge(left, right)
     }
     return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex));
 }
-var merge = merge;
-merge.name = "merge";
+sorts.merge = merge;
+sorts.merge.name = "merge";
 
 /*bubbleSort*/
 function bubbleSort(arr)
@@ -83,8 +83,8 @@ function bubbleSort(arr)
     }
     return arr;
 }
-var bubbleSort = bubbleSort;
-bubbleSort.name = "bubbleSort";
+sorts.bubbleSort = bubbleSort;
+sorts.bubbleSort.name = "bubbleSort";
 
 /*quickSort*/
 function quickSort(arr, left, right)
@@ -112,12 +112,13 @@ function quickSort(arr, left, right)
     }
     return arr;
 }
-var quickSort = quickSort;
-quickSort.name = "quickSort";
+sorts.quickSort = quickSort;
+sorts.quickSort.name = "quickSort";
 
 /*helper partition function for quicksort*/
 function partition(arr, left, right)
 {
+    "use strict";
     var pivot = arr[Math.floor((right + left) / 2)],  // pivot value is middle item
         i = left,
         j = right;
@@ -145,12 +146,13 @@ function partition(arr, left, right)
     }
     return i;
 }
-var partition = partition;
-partition.name = "partition";
+sorts.partition = partition;
+sorts.partition.name = "partition";
 
 /*selectionSort*/
-function selectionSort(arr){
-
+function selectionSort(arr)
+{
+    "use strict";
     var len = arr.length,
         min,
         i,
@@ -176,5 +178,5 @@ function selectionSort(arr){
     }
     return arr;
 }
-var selectionSort = selectionSort;
-selectionSort.name = "selectionSort";
+sorts.selectionSort = selectionSort;
+sorts.selectionSort.name = "selectionSort";
