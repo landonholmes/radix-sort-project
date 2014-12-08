@@ -13,6 +13,21 @@ describe("main", function() {
 
     });
 
+    /*helper function that will obviously check if an array is in sorted order*/
+    function isArraySorted(arr)
+    {
+        var max = arr[0].id;
+        var sorted = true;
+
+        for(var i = 1; i < arr.length; i++) {
+            if(max > arr[i].id) {
+                sorted = false; break;
+            }
+        }
+
+        return sorted;
+    }
+
     describe("find max function", function(){
 
         it("will get the max of the input", function() {
@@ -63,6 +78,10 @@ describe("main", function() {
         it("radixSortwill sort the larger genInput-function-created array",function(){
             var testArray = radixSort(array.slice()); //copy and sort array
             expect(radixSort(array)).toEqual(testArray);
+        });
+        it("radixSort will actually sort the input",function(){
+            var testArray = radixSort(array.slice()); //copy and sort array
+            expect(isArraySorted(radixSort(array))).toBeTrue();
         });
     });
 
